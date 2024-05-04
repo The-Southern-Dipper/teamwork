@@ -42,3 +42,18 @@ cd build
 就可以在Docker中直接运行项目，依赖什么的都准备好了的。这样就可以不用担心环境问题而专心于前端功能的开发。
 
 当使用服务器时发现是服务器无法处理前端的请求或者请求有误时，通知PM，然后由后端解决。
+
+## 接口可能用到的Util
+
+### 验证码发送
+
+发送给指定邮箱验证码的方法定义在`util`包下的`EmailUtil`类中
+
+使用演示：
+
+```Java
+// 向邮箱2457699535@aliyun.com发送验证码
+// EmailUtil.sendCaptcha会返回发送出去的验证码
+String chaptcha = EmailUtil.sendCaptcha("2457699535@aliyun.com");
+System.out.println(chaptcha);
+```
