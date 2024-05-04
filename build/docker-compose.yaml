@@ -1,0 +1,63 @@
+version: "3.8"
+
+networks:
+  aderversa:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+
+services:
+  database:
+    image: mysql:8.4.0
+    container_name: mysql-project
+    ports:
+      - "8888:3306"
+    networks:
+      aderversa:
+        ipv4_address: 172.20.0.2
+    environment:
+      - TZ=/Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=123456
+    volumes:
+      - "./volums/mysql-volum/init:/docker-entrypoint-initdb.d"
+      - "./volums/mysql-volum/conf:/etc/mysql"
+      - "./volums/mysql-volum/mysql-files:/var/lib/mysql-files"
+      - "./volums/mysql-volum/data:/var/lib/mysql"
+  redis:
+    image: redis:7.2.4
+    container_name: redis-project
+    privileged: true
+    ports:
+      - "6379:6379"
+    networks:
+      aderversa:
+        ipv4_address: 172.20.0.3
+    volumes:
+      - "./volums/redis-volum/conf/redis.conf:/etc/redis/redis.conf"
+      - "./volums/redis-volum/data:/data"
+    command:
+      - /bin/bash
+      - -c
+      - |
+        echo 551 > /proc/sys/net/core/somaxconn
+        redis-server /etc/redis/redis.conf
+  project:
+    image: openjdk:17
+    container_name: project
+    ports:
+      - "8080:8080"
+    networks:
+      aderversa:
+        ipv4_address: 172.20.0.4
+    depends_on:
+      - database
+      - redis
+    volumes:
+      - "./volums/project-volum/SecondHandPlatform.jar:/app.jar"
+      - "./volums/project-volum/application.yaml:/application.yaml"
+    command:
+      - /bin/bash
+      - -c
+      - |
+        java -jar /app.jar
