@@ -7,7 +7,7 @@
 需要安装：
 
 1. Docker的运行环境（这里推荐Windows的Docker Desktop版本，网络上说这玩意非常占空间但胜在安装简单）
-2. shell脚本的运行环境（Windows下安装了git就会有一个git bash，在git bash下用`./build/install.sh`就可以运行脚本）
+2. shell脚本的运行环境（Windows下安装了git就会有一个git bash，在git bash下用`./build/install.sh`就可以运行脚本，最好为git bash配置一下环境变量）
 
 开发人员可依据自己主机的运行环境的安装情况来自行决定要不要使用Docker，这里说明一下Docker中安装的东西：
 
@@ -24,3 +24,21 @@
 
 也就是说，直接执行`depends.sh`脚本后，就可以直接用IDEA里面的RUN功能了，环境什么的不用担心。
 
+==也就是说，后端可以这样使用本项目：==
+
+```shell
+cd build
+./depend.sh
+```
+---
+
+对于前端，一般不需要使用IDEA进行运行，运行的频率也不高，这时候就不用打开IDEA了。直接把项目clone到本地，然后使用如下命令：
+
+```shell
+cd build
+./install.sh
+```
+
+就可以在Docker中直接运行项目，依赖什么的都准备好了的。这样就可以不用担心环境问题而专心于前端功能的开发。
+
+当使用服务器时发现是服务器无法处理前端的请求或者请求有误时，通知PM，然后由后端解决。
