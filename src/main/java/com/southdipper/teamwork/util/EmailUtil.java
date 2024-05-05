@@ -28,6 +28,7 @@ public class EmailUtil {
         return chaptcha.toString();
     }
     // 发送验证码给指定邮箱，并返回发送的验证码
+    // reciever: 验证码接收者的邮箱号
     public static String sendCaptcha(String reciever) {
         Properties props = new Properties();
         props.put("mail.smtp.host", emailServer);

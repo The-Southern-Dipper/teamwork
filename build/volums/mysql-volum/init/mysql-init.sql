@@ -22,7 +22,7 @@ create table user
 create table book_type
 (
     id int unsigned primary key auto_increment comment '类别ID',
-    name varchar(20) not null comment '类别名'
+    name varchar(20) not null unique comment '类别名'
 )default character set utf8mb4 comment '书籍类别';
 
 create table book
