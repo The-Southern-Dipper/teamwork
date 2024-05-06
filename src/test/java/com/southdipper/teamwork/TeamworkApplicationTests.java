@@ -3,9 +3,12 @@ package com.southdipper.teamwork;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.southdipper.teamwork.service.RedisService;
 import com.southdipper.teamwork.util.JwtUtil;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -13,6 +16,8 @@ import java.util.Map;
 
 @SpringBootTest
 class TeamworkApplicationTests {
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
 
     @Test
     void contextLoads() {
@@ -36,6 +41,7 @@ class TeamworkApplicationTests {
         builder.withClaim("id", id);
         String token = builder.sign(algorithm);
         System.out.println(token);
+        stringRedisTemplate.opsForSet().add(username, token);
     }
 
 }
