@@ -48,7 +48,7 @@ echo -n -e ${RESET}
 rm -rf ./volums/redis-volum/data
 if [ $? == "0" ]; then
   echo -n -e ${SET_GREEN}
-  echo -n "删除成功"
+  echo "删除成功"
 else
   echo -n -e ${SET_RED}
   echo "删除失败"
