@@ -57,3 +57,60 @@ cd build
 String chaptcha = EmailUtil.sendCaptcha("2457699535@aliyun.com");
 System.out.println(chaptcha);
 ```
+
+## 一些工具的接口
+
+### 邮件发送验证码
+
+使用的例子：
+
+```Java
+String reciever = "2457699535@aliyun.com";
+// 向指定邮箱发送随机的6位数字验证码，并返回发送的验证码
+String chaptcha = EmailUtil.sendCaptcha(reciever);
+System.out.println(chaptcha);
+```
+
+### JWT的生成
+
+```Java
+import com.southdipper.teamwork.util.JwtUtil;
+
+User user;
+// 生成JWT令牌，并将username和id存入令牌中 
+String token = JwtUtil.generateToken(user.getId(), user.getUsername());
+// 通过token可以取出事先存好的id, username
+Integer id = JwtUtil.getIdFromToken(token);
+String username = JwtUtil.getUsernameFromToken(token);
+// 检查JWT是否被篡改,true表示未被篡改，false表示被篡改了
+if(!JwtUtil.verify(token)) {
+    System.out.println("已被篡改")
+}
+```
+
+### Redis存储JWT和邮箱验证码
+
+```Java
+import com.southdipper.teamwork.service.RedisService;
+import org.springframework.beans.factory.annotation.Autowired;
+// 注入Redis服务
+@Autowired
+RedisService redisService;
+// Redis缓存JWT令牌
+User user; 
+String token = JwtUtil.generateToken(user.getId(), user.getUsername());
+redisService.saveJWT(user.getUsername(), token);
+// 如何检查JWT
+if(!JwtUtil.verify(token)) {
+        System.out.println("已被篡改");
+}
+else {
+    // true: token存在于Redis缓存
+    boolean result = redisService.checkJWT(JwtUtil.getUsernameFromToken(token), token);
+    if(!result) {
+        System.out.println("token不存在于缓存中, 可能是过期了，或者修改了密码");
+    }
+}
+
+
+```
