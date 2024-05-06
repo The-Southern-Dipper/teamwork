@@ -111,6 +111,13 @@ else {
         System.out.println("token不存在于缓存中, 可能是过期了，或者修改了密码");
     }
 }
+```
 
+### 生成响应给前端的数据
 
+```Java
+// 不用关心响应码，success会自动设置响应码为0，error会设置响应码为1
+Result.success(Object data); // 由于这是个模板所以能存放任何继承自Object的对象
+Result.success(); // 响应数据为null
+Result.error("错误信息"); // 响应错误信息
 ```
