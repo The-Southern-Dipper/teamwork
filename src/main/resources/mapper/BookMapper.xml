@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.southdipper.teamwork.mapper.BookMapper">
+    <sql id="commonSelect">
+        select id,
+               name,
+               type_id,
+               price,
+               isbn,
+               img,
+               detail,
+               release_time,
+               seller_id,
+               purchased
+        from second_hand.book
+    </sql>
+    <insert id="add">
+        Insert Into second_hand.book(name, type_id, price, isbn, img, detail, release_time, seller_id, purchased)
+        VALUES (#{name}, #{typeId}, #{price}, #{isbn}, #{img}, #{detail}, now(), #{sellerId}, 0)
+    </insert>
+    <select id="search" resultType="book">
+        <include refid="commonSelect"/>
+        <where>
+            <if test="content != null">
+                name like concat('%',#{content},'%')
+            </if>
+            <if test="priceStart != null">
+                and price >= #{priceStart}
+            </if>
+            <if test="priceEnd != null">
+                and #{priceEnd} >= price
+            </if>
+            <if test="typeId != null">
+                and type_id = #{typeId}
+            </if>
+        </where>
+        order by
+        <if test="orderRequest == 0">
+            release_time asc
+        </if>
+        <if test="orderRequest == 1">
+            release_time desc
+        </if>
+        <if test="orderRequest == 2">
+            price asc
+        </if>
+        <if test="orderRequest == 3">
+            price desc
+        </if>
+        limit #{pageNumber},#{bookNumber}
+    </select>
+</mapper>
