@@ -9,6 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+/*
+负责人：张永祥
+除了访问登录、注册和发送邮箱验证码这几个接口外，其他接口都必须要携带JWT令牌作为用户身份的标识
+登录拦截器LoginInterceptor就是为此而存在的，防止有人没有JWT令牌还想使用网站的服务
+ */
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
     @Autowired

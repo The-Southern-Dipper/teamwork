@@ -7,6 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+/*
+负责人：张永祥
+处理Axios由于自定义请求头产生的探测请求的拦截器
+ */
 @Component
 public class CorsInterceptor implements HandlerInterceptor {
     @Override

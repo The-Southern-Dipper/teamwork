@@ -10,6 +10,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+负责人：张永祥
+JWT工具类，用来生成JWT令牌、从JWT取出username和id、验证JWT令牌是否被篡改或过期
+ */
 public class JwtUtil {
     // 过期时间：60分钟
     private static final long EXPIRE_TIME = 60*60*1000;
