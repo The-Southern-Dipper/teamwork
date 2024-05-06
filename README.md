@@ -60,6 +60,14 @@ System.out.println(chaptcha);
 
 ## 一些工具的接口
 
+### ThreadLocalUtil
+
+ThreadLocalUtil类做出如下保证：
+
+除了登录、注册、发送验证码接口，只用使用者在Controller、Service层调用`ThreadLocalUtil.getUsername() or ThreadLocalUtil.getId()`就可以取得调用该请求的用户的用户名username或者用户id
+
+> 本质上是从用户的Http请求的Header中带有JWT令牌，通过JWT令牌解析而来
+
 ### 邮件发送验证码
 
 使用的例子：
