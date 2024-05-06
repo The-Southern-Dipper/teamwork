@@ -13,13 +13,13 @@ public class ThreadLocalUtil {
     }
 
     public static String getUsername() {
-        Map<String, Object> map = get();
-        return (String)map.get("username");
+        String token = get();
+        return JwtUtil.getUsernameFromToken(token);
     }
 
     public static Integer getId() {
-        Map<String, Object> map = get();
-        return (Integer)map.get("id");
+        String token = get();
+        return JwtUtil.getIdFromToken(token);
     }
 
     public static void remove() {
