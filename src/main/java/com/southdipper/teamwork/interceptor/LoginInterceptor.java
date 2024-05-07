@@ -20,7 +20,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     RedisService redisService;
     @Override
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) {
-        String token = request.getParameter("Authorization");
+        String token = request.getHeader("Authorization");
         // token没有被篡改
         if(JwtUtil.verify(token)) {
             //  Redis中有没有？
