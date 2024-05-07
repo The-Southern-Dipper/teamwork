@@ -12,4 +12,7 @@ public interface BookService {
 
     //按要求查找别人的书籍
     List<Book> search(SelectRequest selectRequest);
+
+    //查找待售书籍（按用户ID）
+    List<Book> searchFromId(Integer sellerId);
 }
