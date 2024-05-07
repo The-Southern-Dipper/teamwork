@@ -53,4 +53,9 @@
         <include refid="commonSelect"/>
         where seller_id = #{sellerId}
     </select>
+    <delete id="delete">
+        delete
+        from second_hand.book
+        where id = #{id}
+    </delete>
 </mapper>

@@ -17,4 +17,7 @@ public interface BookMapper {
 
     //按用户ID查询待售书籍
     List<Book> searchFromId(Integer sellerId);
+
+    //按书籍 ID 删除书本
+    void delete(Integer id);
 }
