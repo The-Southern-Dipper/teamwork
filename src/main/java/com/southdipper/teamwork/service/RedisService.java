@@ -21,9 +21,9 @@ public interface RedisService {
     /*
     将键名为id，值为captcha的键值对存入Redis
      */
-    void saveEmailCaptcha(Integer id, String captcha);
+    void saveEmailCaptcha(String email, String captcha);
     /*
     检查验证码是否正确
      */
-    boolean checkEmailCaptcha(Integer id, String captcha);
+    boolean checkEmailCaptcha(String email, String captcha);
 }
