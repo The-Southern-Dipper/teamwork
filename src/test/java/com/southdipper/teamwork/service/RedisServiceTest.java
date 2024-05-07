@@ -29,8 +29,8 @@ public class RedisServiceTest {
         redisService.deleteJWT(username);
         String reciever = "2457699535@qq.com";
         String captcha = EmailUtil.sendCaptcha(reciever);
-        redisService.saveEmailCaptcha(id, captcha);
-        if(!redisService.checkEmailCaptcha(id, captcha)) {
+        redisService.saveEmailCaptcha(String.valueOf(id), captcha);
+        if(!redisService.checkEmailCaptcha(String.valueOf(id), captcha)) {
             System.out.println("邮箱验证码不存在于Redis缓冲中");
         }
     }

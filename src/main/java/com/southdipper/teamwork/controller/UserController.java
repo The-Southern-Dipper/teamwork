@@ -15,6 +15,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /*
 负责人：黄俊杰
  */
@@ -29,15 +31,13 @@ public class UserController {
     RedisService redisService;
 
     @PostMapping("/register")
-    public Result register(@Pattern(regexp = "^\\S{5,16}$")String username,
-                           @Pattern(regexp = "^\\S{5,16}$")String password,
-                           @Pattern(regexp = "^\\S{5,16}$")String confirmpassword,
-                           @Pattern(regexp = "^\\S{6}$")String captcha,
-                           @Email String email) {
-        User user = userService.getByUserName(username);
+    public Result register(@RequestBody Map<String,String>params) {
+
+        System.out.println(params.toString());
+        User user = userService.getByUserName(params.get("username"));
         if(user == null) {
             //用户不存在，进入注册流程
-            if(!password.equals(confirmpassword)) {
+            if(!params.get("password").equals(params.get("confirmPassword"))) {
                 return Result.error("两次输入的密码不相同");
             }
             /**发送验证码,调用接口
@@ -46,11 +46,11 @@ public class UserController {
              *
              */
             //验证代码
-            if(!redisService.checkEmailCaptcha(email,captcha)){
+            if(!redisService.checkEmailCaptcha(params.get("email"),params.get("captcha"))){
                 return Result.error("验证码错误");
             }
             //注册到数据库
-            userService.register(username, MD5Util.md5(password),email);
+            userService.register(params.get("username"), MD5Util.md5(params.get("password")),params.get("email"));
             return Result.success("注册成功");
         }
         else {
@@ -78,6 +78,7 @@ public class UserController {
     public Result getInfo() {
         String username = ThreadLocalUtil.getUsername();
         User user = userService.getByUserName(username);
+
         return Result.success(user);
     }
 
@@ -108,16 +109,14 @@ public class UserController {
     }
 
     @PatchMapping("/changePwd")
-    public Result changePassword(@Pattern(regexp = "^\\S{5,16}$")String oldPwd,
-                                 @Pattern(regexp = "^\\S{5,16}$")String newPwd,
-                                 @Pattern(regexp = "^\\S{5,16}$")String confirmPwd,
-                                 @Pattern(regexp = "^\\S{6}$")String captcha) {
+    public Result changePassword(@RequestBody Map<String,String>params) {
+
         String username = ThreadLocalUtil.getUsername();
         User user = userService.getByUserName(username);
-        if(!user.getPassword().equals(MD5Util.md5(oldPwd))) {
+        if(!user.getPassword().equals(MD5Util.md5(params.get("oldPwd")))) {
             return Result.error("原密码错误");
         }
-        if(!newPwd.equals(confirmPwd)) {
+        if(!params.get("newPwd").equals(params.get("confirmPwd"))) {
             return Result.error("两次输入的密码不相同");
         }
         /**发送验证码,调用接口
@@ -126,12 +125,12 @@ public class UserController {
          *
          */
         //检查验证码
-        if(!redisService.checkEmailCaptcha(user.getEmail(),captcha)){
+        if(!redisService.checkEmailCaptcha(user.getEmail(),params.get("captcha"))){
             return Result.error("验证码错误");
         }
         //删除token，再写入数据库，让用户重新登陆
         redisService.deleteJWT(username);
-        userService.changePwd(username, MD5Util.md5(newPwd));
+        userService.changePwd(username, MD5Util.md5(params.get("newPwd")));
         return Result.success();
     }
 

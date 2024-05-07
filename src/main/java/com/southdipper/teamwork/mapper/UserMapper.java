@@ -15,7 +15,7 @@ public interface UserMapper {
     @Select("select * from user where email=#{email}")
     User getByEmail(String email);
 
-    @Insert("insert into user(username,password,email,createTime,updateTime) " +
+    @Insert("insert into user(username,password,email,create_time,update_time) " +
             "values(#{username},#{password},#{email},now(),now())")
     void register(@Param("username")String username, @Param("password")String password,@Param("email")String email);
 
