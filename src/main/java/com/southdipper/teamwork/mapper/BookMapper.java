@@ -14,4 +14,7 @@ public interface BookMapper {
 
     //按要求查询书籍
     public List<Book> search(SelectRequest selectRequest);
+
+    //按用户ID查询待售书籍
+    List<Book> searchFromId(Integer sellerId);
 }

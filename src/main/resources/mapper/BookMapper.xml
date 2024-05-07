@@ -49,4 +49,8 @@
         </if>
         limit #{pageNumber},#{bookNumber}
     </select>
+    <select id="searchFromId" resultType="book">
+        <include refid="commonSelect"/>
+        where seller_id = #{sellerId}
+    </select>
 </mapper>
