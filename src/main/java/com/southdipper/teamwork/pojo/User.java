@@ -28,8 +28,10 @@ public class User {
     @NotEmpty
     @Email
     private String email;
+
     private String userImg;
     private LocalDateTime updateTime;
     private LocalDateTime createTime;
+    @JsonIgnore
     private Integer power;
 }

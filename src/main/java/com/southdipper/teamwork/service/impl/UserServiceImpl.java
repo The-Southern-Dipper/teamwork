@@ -17,6 +17,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getByNickName(String nickname) {
+        return userMapper.getByNickName(nickname);
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return userMapper.getByEmail(email);
+    }
+
+    @Override
     public void register(String username, String password,String email) {
         userMapper.register(username, password,email);
     }

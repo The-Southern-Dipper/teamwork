@@ -9,6 +9,12 @@ public interface UserMapper {
     @Select("select * from user where username=#{username}")
     User getByUserName(String username);
 
+    @Select("select * from user where nickname=#{nickname}")
+    User getByNickName(String nickname);
+
+    @Select("select * from user where email=#{email}")
+    User getByEmail(String email);
+
     @Insert("insert into user(username,password,email,createTime,updateTime) " +
             "values(#{username},#{password},#{email},now(),now())")
     void register(@Param("username")String username, @Param("password")String password,@Param("email")String email);
