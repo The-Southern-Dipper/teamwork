@@ -24,6 +24,7 @@ public class BookServiceImpl implements BookService {
     //查找待售书籍（按需求类）
     @Override
     public List<Book> search(SelectRequest selectRequest) {
+        selectRequest.setPageNumber(selectRequest.getPageNumber() * selectRequest.getBookNumber());
         return bookMapper.search(selectRequest);
     }
 
