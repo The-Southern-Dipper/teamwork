@@ -22,21 +22,20 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) {
         String token = request.getParameter("Authorization");
         // token没有被篡改
-        return true;
-//        if(JwtUtil.verify(token)) {
-//            //  Redis中有没有？
-//            if(!redisService.checkJWT(JwtUtil.getUsernameFromToken(token), token)) {
-//                // Redis中不存在该token
-//                response.setStatus(401);
-//                return false;
-//            }
-//            ThreadLocalUtil.set(token);
-//            return true;
-//        }
-//        else {
-//            response.setStatus(401);
-//            return false;
-//        }
+        if(JwtUtil.verify(token)) {
+            //  Redis中有没有？
+            if(!redisService.checkJWT(JwtUtil.getUsernameFromToken(token), token)) {
+                // Redis中不存在该token
+                response.setStatus(401);
+                return false;
+            }
+            ThreadLocalUtil.set(token);
+            return true;
+        }
+        else {
+            response.setStatus(401);
+            return false;
+        }
     }
     @Override
     public void afterCompletion(final HttpServletRequest request, final HttpServletResponse response, final Object handler, final Exception ex) {

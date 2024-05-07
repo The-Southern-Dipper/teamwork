@@ -6,8 +6,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.southdipper.teamwork.mapper.BookMapper;
 import com.southdipper.teamwork.pojo.Book;
 import com.southdipper.teamwork.pojo.SelectRequest;
-import com.southdipper.teamwork.service.RedisService;
-import com.southdipper.teamwork.util.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +17,9 @@ import java.util.List;
 import java.util.Map;
 
 /*
-这个文件因为冲突决定废弃所以，请不要在这个地方再写任何东西
+这个文件因为冲突决定废弃.
+可以读但不要写
+所以，请不要在这个地方再写任何东西
 请自行开启一个测试文件并标识你的署名
 并且不要随意修改他人所写的文件
 */
