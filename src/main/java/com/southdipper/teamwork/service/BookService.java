@@ -15,4 +15,7 @@ public interface BookService {
 
     //查找待售书籍（按用户ID）
     List<Book> searchFromId(Integer sellerId);
+
+    //删除待售书籍(按书本ID)
+    void delete(Integer id);
 }

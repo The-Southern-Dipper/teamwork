@@ -34,4 +34,9 @@ public class BookServiceImpl implements BookService {
         List<Book> bookList = bookMapper.searchFromId(sellerId);
         return bookList;
     }
+
+    @Override
+    public void delete(Integer id) {
+        bookMapper.delete(id);
+    }
 }
