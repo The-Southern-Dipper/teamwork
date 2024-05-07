@@ -32,4 +32,11 @@ public class BookController {
         List<Book> bookList =  bookService.search(selectRequest);
         return Result.success(bookList);
     }
+
+    //查询待售书籍信息(按用户ID查询)
+    @PostMapping("/searchFromId")
+    public Result searchFromId(Integer sellerId) {
+        List<Book> bookList = bookService.searchFromId(sellerId);
+        return Result.success(bookList);
+    }
 }
