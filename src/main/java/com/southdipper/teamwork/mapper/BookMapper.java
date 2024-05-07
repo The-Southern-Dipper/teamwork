@@ -10,10 +10,10 @@ import java.util.List;
 public interface BookMapper {
 
     //添加待售书籍
-    public void add(Book book);
+    void add(Book book);
 
     //按要求查询书籍
-    public List<Book> search(SelectRequest selectRequest);
+    List<Book> search(SelectRequest selectRequest);
 
     //按用户ID查询待售书籍
     List<Book> searchFromId(Integer sellerId);

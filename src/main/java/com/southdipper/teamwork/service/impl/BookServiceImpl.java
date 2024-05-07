@@ -24,15 +24,13 @@ public class BookServiceImpl implements BookService {
     //查找待售书籍（按需求类）
     @Override
     public List<Book> search(SelectRequest selectRequest) {
-        List<Book> bookList = bookMapper.search(selectRequest);
-        return bookList;
+        return bookMapper.search(selectRequest);
     }
 
     //查找待售书籍（按用户ID）
     @Override
     public List<Book> searchFromId(Integer sellerId) {
-        List<Book> bookList = bookMapper.searchFromId(sellerId);
-        return bookList;
+        return bookMapper.searchFromId(sellerId);
     }
 
     @Override
