@@ -43,17 +43,17 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public void saveEmailCaptcha(Integer id, String captcha) {
+    public void saveEmailCaptcha(String email, String captcha) {
         // 邮件验证码过期时间10分钟
         long expireTime = 10 * 60 * 1000;
         ValueOperations<String, String> operations = redisTemplate.opsForValue();
-        operations.set(id.toString(), captcha, expireTime, TimeUnit.MILLISECONDS);
+        operations.set(email, captcha, expireTime, TimeUnit.MILLISECONDS);
     }
 
     @Override
-    public boolean checkEmailCaptcha(Integer id, String captcha) {
+    public boolean checkEmailCaptcha(String email, String captcha) {
         ValueOperations<String, String> operations = redisTemplate.opsForValue();
-        String redisCaptcha = operations.get(id.toString());
+        String redisCaptcha = operations.get(email);
         return redisCaptcha.equals(captcha);
     }
 }
