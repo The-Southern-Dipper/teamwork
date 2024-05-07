@@ -4,6 +4,7 @@ import com.southdipper.teamwork.pojo.Book;
 import com.southdipper.teamwork.pojo.Result;
 import com.southdipper.teamwork.pojo.SelectRequest;
 import com.southdipper.teamwork.service.BookService;
+import com.southdipper.teamwork.util.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,8 @@ public class BookController {
 
     //查询待售书籍信息(按用户ID查询)
     @PostMapping("/searchFromId")
-    public Result searchFromId(Integer sellerId) {
+    public Result searchFromId() {
+        Integer sellerId = ThreadLocalUtil.getId();
         List<Book> bookList = bookService.searchFromId(sellerId);
         return Result.success(bookList);
     }
