@@ -12,6 +12,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,6 +50,8 @@ public class UserController {
             if(!redisService.checkEmailCaptcha(params.get("email"),params.get("captcha"))){
                 return Result.error("验证码错误");
             }
+            //验证成功，删除验证码
+            redisService.deleteEmailCaptcha(params.get("email"), params.get("captcha"));
             //注册到数据库
             userService.register(params.get("username"), MD5Util.md5(params.get("password")),params.get("email"));
             return Result.success("注册成功");
@@ -128,6 +131,8 @@ public class UserController {
         if(!redisService.checkEmailCaptcha(user.getEmail(),params.get("captcha"))){
             return Result.error("验证码错误");
         }
+        //验证成功，删除验证码
+        redisService.deleteEmailCaptcha(params.get("email"), params.get("captcha"));
         //删除token，再写入数据库，让用户重新登陆
         redisService.deleteJWT(username);
         userService.changePwd(username, MD5Util.md5(params.get("newPwd")));
