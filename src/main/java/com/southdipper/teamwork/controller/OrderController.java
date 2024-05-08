@@ -40,7 +40,13 @@ public class OrderController {
 
     @PostMapping("/reserve")
     public Result reserve(Integer bookId){
-        Order order=orderService.generate(bookId);
-        return Result.success(order);
+        orderService.generate(bookId);
+        return Result.success();
+    }
+
+    @PostMapping("/confirm")
+    public Result confirm(Integer id){
+        orderService.confirm(id);
+        return Result.success();
     }
 }

@@ -13,25 +13,33 @@ import java.util.List;
 public interface OrderMapper {
 
     //通过用户id查询自己的订单列表
-    @Select("select * from order where user_id=#{userId}")
+    @Select("select * from second_hand.order where user_id=#{userId}")
     List<Order> getByUserId(Integer userId);
 
     //通过书籍id查找该书的预订者和对应订单id
-    @Select("select (nickname,email,order.id) from (user,order  ) where book_id=#{bookId}")
+    @Select("select second_hand.order.id,second_hand.user.nickname,second_hand.user.email from second_hand.order join second_hand.user" +
+            " where second_hand.order.book_id=#{bookId}")
     List<BookSell> getByBookId(Integer bookId);
 
     //通过书籍id查找卖家的出售列表
-    @Select("select * from order where book_id=(select id from book where (seller_id=#{sellerId}))")
+    @Select("select * from second_hand.order where book_id=(select id from second_hand.book where (seller_id=#{sellerId}))")
     List<Order> getBySeller(Integer sellerId);
 
     //预定书籍
-    @Insert("insert into order(user_id,book_id,pay_time,address,status)"+
-            "values(#{userId},#{bookId},#{payTime},#{address},#{status})")
-    Order generate(Order order);
+    @Insert("insert into second_hand.order(user_id,book_id,pay_time,address,status)"+
+            " values (#{userId},#{bookId},#{payTime},#{address},#{status})")
+    void generate(Order order);
 
     //确认订单
-    @Update("update order set status=2 where id=#{id}")
-    Order confirm();
+    //确认的订单
+    @Update("update second_hand.order set status=#{status} where id=#{id}")
+    void confirm(Integer status,Integer id);
+    //被取消的订单
+    @Update("update second_hand.order set status=#{status} where book_id=(select book_id from second_hand.order where id=#{id}) and id!=#{id}")
+    void cancel(Integer status,Integer id);
+    //修改预售书籍的purchased
+    @Update("update second_hand.book set purchased=#{purchased} where book_id=(select book_id from second_hand.order where id=#{id})")
+    void changePurchased(Integer purchased,Integer id);
 
 
 }

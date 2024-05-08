@@ -16,30 +16,40 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     OrderMapper orderMapper;
 
+    //通过用户id查询自己的订单列表
     @Override
     public List<Order> getByUserId() {
         Integer userId=ThreadLocalUtil.getId();
         return orderMapper.getByUserId(userId);
     }
 
+    //通过书籍id查找该书的预订者和对应订单id
     @Override
     public List<BookSell> getByBookId(Integer bookId) {
         return orderMapper.getByBookId(bookId);
     }
 
+    //通过书籍id查找卖家的出售列表
     @Override
     public List<Order> getBySeller() {
         Integer sellerId=ThreadLocalUtil.getId();
         return orderMapper.getBySeller(sellerId);
     }
 
+    //预定书籍
     @Override
-    public Order generate(Integer bookId) {
+    public void generate(Integer bookId) {
         Order order = new Order();
         order.setBookId(bookId);
         order.setUserId(ThreadLocalUtil.getId());
         order.setStatus(1);
         order.setPayTime(LocalDateTime.now());
-        return orderMapper.generate(order);
+    }
+
+    @Override
+    public void confirm(Integer id) {
+        orderMapper.cancel(3,id);
+        orderMapper.confirm(2,id);
+        orderMapper.changePurchased(1,id);
     }
 }
