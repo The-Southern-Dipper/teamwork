@@ -1,5 +1,6 @@
 package com.southdipper.teamwork.service.impl;
 
+import com.southdipper.teamwork.mapper.BookMapper;
 import com.southdipper.teamwork.mapper.OrderMapper;
 import com.southdipper.teamwork.pojo.BookSell;
 import com.southdipper.teamwork.pojo.Order;
@@ -51,5 +52,6 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.cancel(3,id);
         orderMapper.confirm(2,id);
         orderMapper.changePurchased(1,id);
+        orderMapper.delete(id);
     }
 }

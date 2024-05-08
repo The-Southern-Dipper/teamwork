@@ -2,10 +2,7 @@ package com.southdipper.teamwork.mapper;
 
 import com.southdipper.teamwork.pojo.BookSell;
 import com.southdipper.teamwork.pojo.Order;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -35,11 +32,16 @@ public interface OrderMapper {
     @Update("update second_hand.order set status=#{status} where id=#{id}")
     void confirm(Integer status,Integer id);
     //被取消的订单
-    @Update("update second_hand.order set status=#{status} where book_id=(select book_id from second_hand.order where id=#{id}) and id!=#{id}")
+    @Update("update second_hand.order set status=#{status} where second_hand.order.book_id=" +
+            "(select book_id from " +
+            "(select second_hand.order.book_id from second_hand.order where book_id=#{id})a )" +
+            " and id!=#{id}")
     void cancel(Integer status,Integer id);
     //修改预售书籍的purchased
-    @Update("update second_hand.book set purchased=#{purchased} where book_id=(select book_id from second_hand.order where id=#{id})")
+    @Update("update second_hand.book set purchased=#{purchased}" +
+            " where second_hand.book.id=(select second_hand.order.book_id from second_hand.order where second_hand.order.id=#{id})")
     void changePurchased(Integer purchased,Integer id);
-
+    @Delete("delete from second_hand.book where second_hand.book.id=(select book_id from second_hand.order where second_hand.order.id=#{id})")
+    void delete(Integer id);
 
 }
