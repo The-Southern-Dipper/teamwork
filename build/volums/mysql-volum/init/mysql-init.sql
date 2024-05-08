@@ -65,3 +65,5 @@ create table `record`
     type int unsigned not null default 1 comment '记录类型',
     content varchar(150) not null comment '记录'
 )default character set utf8mb4 comment '聊天记录';
+
+insert into book_type (name) values('全部');
