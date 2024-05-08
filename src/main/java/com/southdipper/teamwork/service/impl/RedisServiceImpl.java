@@ -56,4 +56,9 @@ public class RedisServiceImpl implements RedisService {
         String redisCaptcha = operations.get(email);
         return redisCaptcha.equals(captcha);
     }
+
+    @Override
+    public void deleteEmailCaptcha(String email, String captcha) {
+        redisTemplate.delete(email);
+    }
 }

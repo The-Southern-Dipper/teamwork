@@ -26,4 +26,8 @@ public interface RedisService {
     检查验证码是否正确
      */
     boolean checkEmailCaptcha(String email, String captcha);
+    /*
+    删除邮箱验证码
+     */
+    void deleteEmailCaptcha(String email, String captcha);
 }
