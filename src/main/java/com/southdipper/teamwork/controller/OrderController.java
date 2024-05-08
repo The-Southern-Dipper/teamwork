@@ -19,9 +19,21 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
-    @PostMapping("/getInfo")
-    public Result getInfo(String userId){
+    @PostMapping("/userReverse")
+    public Result userReverse(Integer userId){
         List<Order> orderList=orderService.getByUserId(userId);
         return Result.success(orderList);
+    }
+
+    @PostMapping("/bookBuyer")
+    public Result bookBuyer(Integer bookId){
+        List<Order> orderList=orderService.getByBookId(bookId);
+        return Result.success(orderList);
+    }
+
+    @PostMapping("/reserve")
+    public Result reserve(Order order){
+        orderService.generate(order);
+        return Result.success();
     }
 }
