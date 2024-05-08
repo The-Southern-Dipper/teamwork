@@ -1,5 +1,6 @@
 package com.southdipper.teamwork.controller;
 
+import com.southdipper.teamwork.pojo.BookSell;
 import com.southdipper.teamwork.pojo.Order;
 import com.southdipper.teamwork.pojo.Result;
 import com.southdipper.teamwork.service.OrderService;
@@ -20,20 +21,26 @@ public class OrderController {
     OrderService orderService;
 
     @PostMapping("/userReverse")
-    public Result userReverse(Integer userId){
-        List<Order> orderList=orderService.getByUserId(userId);
+    public Result userReverse(){
+        List<Order> orderList=orderService.getByUserId();
         return Result.success(orderList);
     }
 
     @PostMapping("/bookBuyer")
     public Result bookBuyer(Integer bookId){
-        List<Order> orderList=orderService.getByBookId(bookId);
+        List<BookSell> bookSellList=orderService.getByBookId(bookId);
+        return Result.success(bookSellList);
+    }
+
+    @PostMapping("/sellList")
+    public Result sellList(){
+        List<Order> orderList=orderService.getBySeller();
         return Result.success(orderList);
     }
 
     @PostMapping("/reserve")
-    public Result reserve(Order order){
-        orderService.generate(order);
-        return Result.success();
+    public Result reserve(Integer bookId){
+        Order order=orderService.generate(bookId);
+        return Result.success(order);
     }
 }
