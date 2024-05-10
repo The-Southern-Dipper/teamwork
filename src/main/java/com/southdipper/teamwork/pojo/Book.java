@@ -17,7 +17,8 @@ public class Book {
     private String isbn;
     private String img;
     private String detail;
-    private LocalDateTime releaseTime;
+    private String releaseTime;
     private Integer sellerId;
     private Integer purchased = 0;  //0代表未售
+    private String sellerName;
 }
