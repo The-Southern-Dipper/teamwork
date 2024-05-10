@@ -6,12 +6,15 @@ import com.southdipper.teamwork.pojo.SelectRequest;
 import com.southdipper.teamwork.service.BookService;
 import com.southdipper.teamwork.util.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/book")
+@Validated
+@CrossOrigin(origins = "*")
 public class BookController {
 
     @Autowired
@@ -44,5 +47,12 @@ public class BookController {
     public Result delete(Integer id) {
         bookService.delete(id);
         return Result.success();
+    }
+
+    //获取当前搜索书籍数量
+    @PostMapping("getNumber")
+    public Result getNumber(@RequestBody SelectRequest selectRequest) {
+        Integer number = bookService.getNumber(selectRequest);
+        return Result.success(number);
     }
 }

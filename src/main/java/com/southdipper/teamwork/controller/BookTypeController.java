@@ -4,16 +4,15 @@ import com.southdipper.teamwork.pojo.BookType;
 import com.southdipper.teamwork.pojo.Result;
 import com.southdipper.teamwork.service.BookTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.southdipper.teamwork.util.JwtUtil;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/book")
+@Validated
+@CrossOrigin(origins = "*")
 public class BookTypeController {
 
     @Autowired
