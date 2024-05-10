@@ -8,6 +8,7 @@ import com.southdipper.teamwork.service.ChatRecordService;
 import com.southdipper.teamwork.service.ConnectionService;
 import com.southdipper.teamwork.util.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/chat")
+@CrossOrigin(origins = "*")
 public class ChatController {
     @Autowired
     ConnectionService connectionService;
