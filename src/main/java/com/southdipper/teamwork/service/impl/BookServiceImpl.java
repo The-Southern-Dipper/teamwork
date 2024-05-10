@@ -38,4 +38,10 @@ public class BookServiceImpl implements BookService {
     public void delete(Integer id) {
         bookMapper.delete(id);
     }
+
+    //获取当前搜索书籍总数
+    @Override
+    public Integer getNumber(SelectRequest selectRequest) {
+        return bookMapper.getNumber(selectRequest);
+    }
 }

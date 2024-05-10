@@ -18,4 +18,7 @@ public interface BookService {
 
     //删除待售书籍(按书本ID)
     void delete(Integer id);
+
+    //获取当前搜索书籍总数
+    Integer getNumber(SelectRequest selectRequest);
 }

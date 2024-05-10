@@ -48,4 +48,11 @@ public class BookController {
         bookService.delete(id);
         return Result.success();
     }
+
+    //获取当前搜索书籍数量
+    @PostMapping("getNumber")
+    public Result getNumber(@RequestBody SelectRequest selectRequest) {
+        Integer number = bookService.getNumber(selectRequest);
+        return Result.success(number);
+    }
 }
