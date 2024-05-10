@@ -42,7 +42,15 @@
         SET user1_online = #{user1Online}, user2_online = #{user2Online}
         WHERE id = #{id}
     </update>
-    <select id="getConnectionInfo1" resultType="Connection">
+    <resultMap id="connectionInfoMap1" type="ConnectionResponse">
+        <id column="id" property="connectionId"/>
+        <result column="user2_id" property="chatTargetId"/>
+        <result column="user2_online" property="isChatTargetOnline"/>
+        <result column="user1_unread" property="unreadMessageCount"/>
+        <result column="latest_content_type" property="latestUnreadMessageType"/>
+        <result column="latest_content" property="latestUnreadMessage"/>
+    </resultMap>
+    <select id="getConnectionInfo1" resultMap="connectionInfoMap1">
         SELECT  id,
                 user2_id,
                 user2_online,
@@ -52,7 +60,15 @@
         FROM second_hand.connection
         WHERE user1_id = #{userId}
     </select>
-    <select id="getConnectionInfo2" resultType="Connection">
+    <resultMap id="connectionInfoMap2" type="ConnectionResponse">
+        <id column="id" property="connectionId"/>
+        <result column="user1_id" property="chatTargetId"/>
+        <result column="user1_online" property="isChatTargetOnline"/>
+        <result column="user2_unread" property="unreadMessageCount"/>
+        <result column="latest_content_type" property="latestUnreadMessageType"/>
+        <result column="latest_content" property="latestUnreadMessage"/>
+    </resultMap>
+    <select id="getConnectionInfo2" resultMap="connectionInfoMap2">
         SELECT  id,
                 user1_id,
                 user1_online,

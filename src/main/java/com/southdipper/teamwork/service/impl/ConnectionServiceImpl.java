@@ -2,6 +2,7 @@ package com.southdipper.teamwork.service.impl;
 
 import com.southdipper.teamwork.mapper.ConnectionMapper;
 import com.southdipper.teamwork.pojo.Connection;
+import com.southdipper.teamwork.pojo.ConnectionResponse;
 import com.southdipper.teamwork.service.ConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,12 +33,12 @@ public class ConnectionServiceImpl implements ConnectionService {
     }
 
     @Override
-    public List<Connection> getConnectionInfo1(Integer userId) {
+    public List<ConnectionResponse> getConnectionInfo1(Integer userId) {
         return connectionMapper.getConnectionInfo1(userId);
     }
 
     @Override
-    public List<Connection> getConnectionInfo2(Integer userId) {
+    public List<ConnectionResponse> getConnectionInfo2(Integer userId) {
         return connectionMapper.getConnectionInfo2(userId);
     }
 }
