@@ -40,4 +40,5 @@ public class UserServiceImpl implements UserService {
     public void changePwd(String username, String newPwd) {
         userMapper.changePwd(username, newPwd);
     }
+
 }

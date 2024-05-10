@@ -9,5 +9,4 @@ public interface UserService {
     void register(String username, String password,String email);
     void updateMsg(User user);
     void changePwd(String username, String newPwd);
-
 }

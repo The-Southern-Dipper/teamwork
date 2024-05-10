@@ -24,4 +24,5 @@ public interface UserMapper {
 
     @Update("update user set password=#{newPwd},update_time=now() where username=#{username}")
     void changePwd(@Param("username")String username, @Param("newPwd")String newPwd);
+
 }

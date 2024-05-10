@@ -16,6 +16,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DecimalFormat;
 import java.util.Map;
 
 /*
@@ -41,19 +42,40 @@ public class UserController {
             if(!params.get("password").equals(params.get("confirmPassword"))) {
                 return Result.error("两次输入的密码不相同");
             }
-            /**发送验证码,调用接口
-             *
-             *
-             *
+            /**
+             * 验证邮箱是否唯一
              */
-            //验证代码
+            if(userService.getByEmail(params.get("email"))!=null){
+                return Result.error("邮箱已被使用");
+            }
+            /**
+             * 前端调用接口，发送验证码
+             */
+            /**
+             * 验证代码
+             */
             if(!redisService.checkEmailCaptcha(params.get("email"),params.get("captcha"))){
                 return Result.error("验证码错误");
             }
-            //验证成功，删除验证码
+            /**
+             * 验证成功，删除验证码
+             */
             redisService.deleteEmailCaptcha(params.get("email"), params.get("captcha"));
-            //注册到数据库
+            /**
+             * 注册到数据库
+             */
             userService.register(params.get("username"), MD5Util.md5(params.get("password")),params.get("email"));
+            /**给予用户初始昵称
+             * 获得用户id,然后拼接为User+id
+             */
+            User newUser = userService.getByUserName(params.get("username"));
+            String id = new DecimalFormat("000000").format(newUser.getId());
+            String DefaultNickName = "User"+id;
+            newUser.setNickname(DefaultNickName);
+            /**
+             * 更新到数据库
+             */
+            userService.updateMsg(newUser);
             return Result.success("注册成功");
         }
         else {
@@ -81,7 +103,6 @@ public class UserController {
     public Result getInfo() {
         String username = ThreadLocalUtil.getUsername();
         User user = userService.getByUserName(username);
-
         return Result.success(user);
     }
 
@@ -122,10 +143,8 @@ public class UserController {
         if(!params.get("newPwd").equals(params.get("confirmPwd"))) {
             return Result.error("两次输入的密码不相同");
         }
-        /**发送验证码,调用接口
-         *
-         *
-         *
+        /**
+         *发送验证码,调用接口
          */
         //检查验证码
         if(!redisService.checkEmailCaptcha(user.getEmail(),params.get("captcha"))){
