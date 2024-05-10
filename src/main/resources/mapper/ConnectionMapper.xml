@@ -42,4 +42,24 @@
         SET user1_online = #{user1Online}, user2_online = #{user2Online}
         WHERE id = #{id}
     </update>
+    <select id="getConnectionInfo1" resultType="Connection">
+        SELECT  id,
+                user2_id,
+                user2_online,
+                user1_unread,
+                latest_content_type,
+                latest_content
+        FROM second_hand.connection
+        WHERE user1_id = #{userId}
+    </select>
+    <select id="getConnectionInfo2" resultType="Connection">
+        SELECT  id,
+                user1_id,
+                user1_online,
+                user2_unread,
+                latest_content_type,
+                latest_content
+        FROM second_hand.connection
+        WHERE user2_id = #{userId}
+    </select>
 </mapper>

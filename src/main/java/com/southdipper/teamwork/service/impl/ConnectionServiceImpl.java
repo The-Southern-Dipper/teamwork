@@ -6,6 +6,8 @@ import com.southdipper.teamwork.service.ConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ConnectionServiceImpl implements ConnectionService {
     @Autowired
@@ -27,5 +29,15 @@ public class ConnectionServiceImpl implements ConnectionService {
     @Override
     public void setUserOnline(Connection connection) {
         connectionMapper.setUserOnline(connection);
+    }
+
+    @Override
+    public List<Connection> getConnectionInfo1(Integer userId) {
+        return connectionMapper.getConnectionInfo1(userId);
+    }
+
+    @Override
+    public List<Connection> getConnectionInfo2(Integer userId) {
+        return connectionMapper.getConnectionInfo2(userId);
     }
 }

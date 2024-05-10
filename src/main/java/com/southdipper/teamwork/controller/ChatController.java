@@ -37,4 +37,12 @@ public class ChatController {
         connectionService.setUserOnline(connection);
         return Result.success(records);
     }
+    @GetMapping("/getConnectionInfo")
+    public Result getConnectionInfo() {
+        Integer userId = ThreadLocalUtil.getId();
+        List<Connection> connections1 = connectionService.getConnectionInfo1(userId);
+        List<Connection> connections2 = connectionService.getConnectionInfo2(userId);
+        connections1.addAll(connections2);
+        return Result.success(connections1);
+    }
 }
