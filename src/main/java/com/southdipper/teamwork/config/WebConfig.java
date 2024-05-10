@@ -21,6 +21,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(corsInterceptor).addPathPatterns("/**");
         registry.addInterceptor(loginInterceptor).
-                excludePathPatterns("/user/login", "/user/register", "/user/captcha");
+                excludePathPatterns("/user/login", "/user/register", "/user/captcha", "/verify");
     }
 }
