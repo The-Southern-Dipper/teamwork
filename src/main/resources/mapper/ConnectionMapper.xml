@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.southdipper.teamwork.mapper.ConnectionMapper">
+    <select id="getConnection" resultType="Connection">
+        SELECT id, user1_id, user2_id, user1_online, user2_online, user1_unread, user2_unread, create_time
+        FROM second_hand.connection
+        WHERE (user1_id = #{user1Id} AND user2_id = #{user2Id})
+           OR (user1_id = #{user2Id} AND user2_id = #{user1Id})
+    </select>
+    <insert id="createConnection" parameterType="Connection">
+        INSERT INTO
+            second_hand.connection(user1_id,
+                                   user2_id,
+                                   user1_online,
+                                   user2_online,
+                                   user1_unread,
+                                   user2_unread,
+                                   latest_content_type,
+                                   latest_content,
+                                   create_time)
+        VALUES
+            (#{user1Id},
+             #{user2Id},
+             #{user1Online},
+             #{user2Online},
+             #{user1Unread},
+             #{user2Unread},
+             #{latestContentType},
+             #{latestContent},
+             NOW())
+    </insert>
+    <update id="updateConnection" parameterType="Connection">
+        UPDATE second_hand.connection SET
+            user1_unread = #{user1Unread},
+            user2_unread = #{user2Unread},
+            latest_content_type = #{latestContentType},
+            latest_content = #{latestContent}
+        WHERE id = #{id}
+    </update>
+    <update id="setUserOnline" parameterType="Connection">
+        UPDATE second_hand.connection
+        SET user1_online = #{user1Online}, user2_online = #{user2Online}
+        WHERE id = #{id}
+    </update>
+</mapper>

@@ -1,5 +1,6 @@
 package com.southdipper.teamwork.interceptor;
 
+import com.southdipper.teamwork.service.JwtVerifyService;
 import com.southdipper.teamwork.service.RedisService;
 import com.southdipper.teamwork.util.JwtUtil;
 import com.southdipper.teamwork.util.ThreadLocalUtil;
@@ -18,24 +19,17 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class LoginInterceptor implements HandlerInterceptor {
     @Autowired
     RedisService redisService;
+    @Autowired
+    JwtVerifyService jwtVerifyService;
     @Override
-    public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) {
+    public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) throws Exception {
         String token = request.getHeader("Authorization");
-        // token没有被篡改
-        if(JwtUtil.verify(token)) {
-            //  Redis中有没有？
-            if(!redisService.checkJWT(JwtUtil.getUsernameFromToken(token), token)) {
-                // Redis中不存在该token
-                response.setStatus(401);
-                return false;
-            }
-            ThreadLocalUtil.set(token);
+        String upgrade = request.getHeader("upgrade");
+        if(upgrade != null && upgrade.equals("websocket")) {
             return true;
         }
-        else {
-            response.setStatus(401);
-            return false;
-        }
+        jwtVerifyService.verify(token);
+        return true;
     }
     @Override
     public void afterCompletion(final HttpServletRequest request, final HttpServletResponse response, final Object handler, final Exception ex) {

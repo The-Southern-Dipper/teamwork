@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.southdipper.teamwork.mapper.ChatRecordMapper">
+    <insert id="insertChatRecord" parameterType="ChatRecord">
+        INSERT INTO
+            second_hand.chat_record(connection_id,
+                                    sender_id,
+                                    reciever_id,
+                                    send_time,
+                                    content_type,
+                                    content)
+        VALUES
+            (#{connectionId}, #{senderId}, #{recieverId}, NOW(), #{contentType}, #{content})
+    </insert>
+    <select id="getRecord" resultType="ChatRecord">
+        SELECT sender_id, reciever_id, send_time, content_type, content
+        FROM second_hand.chat_record
+        WHERE connection_id = #{connectionId}
+        ORDER BY id ASC
+    </select>
+</mapper>
