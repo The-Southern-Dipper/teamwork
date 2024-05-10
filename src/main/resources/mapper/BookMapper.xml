@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.southdipper.teamwork.mapper.BookMapper">
     <sql id="commonSelect">
-        select id,
+        select second_hand.book.id,
                name,
                type_id,
                price,
@@ -11,13 +11,15 @@
                detail,
                release_time,
                seller_id,
-               purchased
-        from second_hand.book
+               purchased,
+               username as seller_name
+        from second_hand.book,second_hand.user
     </sql>
     <sql id="requestSelect">
         <where>
+            seller_id = second_hand.user.id
             <if test="content != null">
-                name like concat('%',#{content},'%')
+                and name like concat('%',#{content},'%')
             </if>
             <if test="priceStart != null">
                 and price >= #{priceStart}
@@ -26,7 +28,9 @@
                 and #{priceEnd} >= price
             </if>
             <if test="typeId != null">
-                and type_id = #{typeId}
+                <if test="typeId != 0">
+                    and type_id = #{typeId}
+                </if>
             </if>
         </where>
     </sql>
@@ -62,7 +66,7 @@
         where id = #{id}
     </delete>
     <select id="getNumber" resultType="Integer">
-        select count(*) from second_hand.book
+        select count(*) from second_hand.book,second_hand.user
         <include refid="requestSelect"/>
     </select>
 </mapper>
