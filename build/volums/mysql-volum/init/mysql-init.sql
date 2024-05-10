@@ -73,5 +73,3 @@ create table `chat_record`
     content_type int not null comment '消息类型',
     content varchar(500) comment '聊天记录'
 )character set utf8mb4 comment '聊天记录表';
-
-insert into book_type (name) values('全部');
