@@ -20,4 +20,7 @@ public interface BookMapper {
 
     //按书籍 ID 删除书本
     void delete(Integer id);
+
+    //获取当前搜索书籍总数
+    Integer getNumber(SelectRequest selectRequest);
 }
