@@ -25,7 +25,9 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> search(SelectRequest selectRequest) {
         selectRequest.setPageNumber(selectRequest.getPageNumber() * selectRequest.getBookNumber());
-        return bookMapper.search(selectRequest);
+        List<Book> bookList = bookMapper.search(selectRequest);
+        bookList.forEach(book -> book.setReleaseTime(book.getReleaseTime().substring(0,10)));
+        return bookList;
     }
 
     //查找待售书籍（按用户ID）
@@ -43,5 +45,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public Integer getNumber(SelectRequest selectRequest) {
         return bookMapper.getNumber(selectRequest);
+    }
+
+    //通过bookId获取书籍信息
+    @Override
+    public Book getBook(Integer bookId) {
+        return bookMapper.getBook(bookId);
     }
 }

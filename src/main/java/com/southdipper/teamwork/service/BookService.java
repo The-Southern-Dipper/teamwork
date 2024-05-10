@@ -21,4 +21,8 @@ public interface BookService {
 
     //获取当前搜索书籍总数
     Integer getNumber(SelectRequest selectRequest);
+
+
+    //通过bookId获取book信息
+    Book getBook(Integer bookId);
 }

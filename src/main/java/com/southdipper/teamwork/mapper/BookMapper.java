@@ -23,4 +23,7 @@ public interface BookMapper {
 
     //获取当前搜索书籍总数
     Integer getNumber(SelectRequest selectRequest);
+
+    //根据bookId获取书籍信息
+    Book getBook(Integer bookId);
 }
