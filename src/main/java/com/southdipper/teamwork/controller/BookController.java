@@ -55,4 +55,11 @@ public class BookController {
         Integer number = bookService.getNumber(selectRequest);
         return Result.success(number);
     }
+
+    //通过bookID获得book信息
+    @PostMapping("/getBook")
+    public Result getBook(Integer bookId) {
+        Book book = bookService.getBook(bookId);
+        return Result.success(book);
+    }
 }
