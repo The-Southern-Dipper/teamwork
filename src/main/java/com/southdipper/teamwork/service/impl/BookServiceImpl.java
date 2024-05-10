@@ -46,4 +46,10 @@ public class BookServiceImpl implements BookService {
     public Integer getNumber(SelectRequest selectRequest) {
         return bookMapper.getNumber(selectRequest);
     }
+
+    //通过bookId获取书籍信息
+    @Override
+    public Book getBook(Integer bookId) {
+        return bookMapper.getBook(bookId);
+    }
 }

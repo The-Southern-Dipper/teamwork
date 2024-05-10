@@ -69,4 +69,8 @@
         select count(*) from second_hand.book,second_hand.user
         <include refid="requestSelect"/>
     </select>
+    <select id="getBook" resultType="book">
+        <include refid="commonSelect"/>
+        where second_hand.book.id = #{bookId}
+    </select>
 </mapper>
