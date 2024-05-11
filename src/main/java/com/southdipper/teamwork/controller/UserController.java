@@ -10,9 +10,8 @@ import com.southdipper.teamwork.util.MD5Util;
 import com.southdipper.teamwork.util.ThreadLocalUtil;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +33,6 @@ public class UserController {
 
     @PostMapping("/register")
     public Result register(@RequestBody Map<String,String>params) {
-
         System.out.println(params.toString());
         User user = userService.getByUserName(params.get("username"));
         if(user == null) {
@@ -54,9 +52,9 @@ public class UserController {
             /**
              * 验证代码
              */
-            if(!redisService.checkEmailCaptcha(params.get("email"),params.get("captcha"))){
-                return Result.error("验证码错误");
-            }
+//            if(!redisService.checkEmailCaptcha(params.get("email"),params.get("captcha"))){
+//                return Result.error("验证码错误");
+//            }
             /**
              * 验证成功，删除验证码
              */
@@ -155,6 +153,16 @@ public class UserController {
         //删除token，再写入数据库，让用户重新登陆
         redisService.deleteJWT(username);
         userService.changePwd(username, MD5Util.md5(params.get("newPwd")));
+        return Result.success();
+    }
+
+    @PatchMapping("/changeImg")
+    public Result changeImg(@URL String URL){
+        String username = ThreadLocalUtil.getUsername();
+        User user = userService.getByUserName(username);
+        user.setUserImg(URL);
+        userService.updateImg(user);
+
         return Result.success();
     }
 

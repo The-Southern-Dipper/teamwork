@@ -3,8 +3,11 @@ package com.southdipper.teamwork.config;
 import com.southdipper.teamwork.interceptor.CorsInterceptor;
 import com.southdipper.teamwork.interceptor.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /*
@@ -13,6 +16,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+    @Value("${file.upload.path}")
+    String resourcePath;
     @Autowired
     LoginInterceptor loginInterceptor;
     @Autowired
@@ -21,6 +26,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(corsInterceptor).addPathPatterns("/**");
         registry.addInterceptor(loginInterceptor).
-                excludePathPatterns("/user/login", "/user/register", "/user/captcha");
+                excludePathPatterns("/user/login", "/user/register", "/user/captcha", "/upload", "/images/**");
     }
 }

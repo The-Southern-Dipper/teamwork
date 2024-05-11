@@ -59,6 +59,7 @@ services:
     volumes:
       - "./volums/project-volum/SecondHandPlatform.jar:/app.jar"
       - "./volums/project-volum/application.yaml:/application.yaml"
+      - "./volums/project-volum/default.jpg:/web-app/images/default.jpg"
     command:
       - /bin/bash
       - -c

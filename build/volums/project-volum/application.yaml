@@ -8,6 +8,17 @@ spring:
     redis:
       host: 172.20.0.3
       port: 6379
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 30MB
+
+file:
+  upload:
+    path: /web-app/images/
+  coming:
+    path: http://127.0.0.1:8080/images/
 
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
