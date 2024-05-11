@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDateTime;
 
@@ -29,6 +30,7 @@ public class User {
     @Email
     private String email;
 
+    @URL
     private String userImg;
     private LocalDateTime updateTime;
     private LocalDateTime createTime;
