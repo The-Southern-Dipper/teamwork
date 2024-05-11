@@ -12,7 +12,7 @@
                release_time,
                seller_id,
                purchased,
-               username as seller_name
+               nickname as seller_name
         from second_hand.book,second_hand.user
     </sql>
     <sql id="requestSelect">
