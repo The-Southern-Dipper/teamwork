@@ -1,5 +1,6 @@
 package com.southdipper.teamwork.mapper;
 
+import com.southdipper.teamwork.pojo.Book;
 import com.southdipper.teamwork.pojo.BookSell;
 import com.southdipper.teamwork.pojo.Order;
 import org.apache.ibatis.annotations.*;
@@ -19,8 +20,8 @@ public interface OrderMapper {
     List<BookSell> getByBookId(Integer bookId);
 
     //通过书籍id查找卖家的出售列表
-    @Select("select * from second_hand.order where book_id=(select id from second_hand.book where (seller_id=#{sellerId}))")
-    List<Order> getBySeller(Integer sellerId);
+    @Select("select * from second_hand.book where (seller_id=#{sellerId})")
+    List<Book> getBySeller(Integer sellerId);
 
     //预定书籍
     @Insert("insert into second_hand.order(user_id,book_id,pay_time,address,status)"+
@@ -31,16 +32,15 @@ public interface OrderMapper {
     //确认的订单
     @Update("update second_hand.order set status=#{status} where id=#{id}")
     void confirm(Integer status,Integer id);
+    //根据订单id找到bookId
+    @Select("select second_hand.order.book_id from second_hand.order where id=#{id}")
+    Integer findBookId(Integer id);
     //被取消的订单
-    @Update("update second_hand.order set status=#{status} where second_hand.order.book_id=" +
-            "(select book_id from " +
-            "(select second_hand.order.book_id from second_hand.order where book_id=#{id})a )" +
-            " and id!=#{id}")
-    void cancel(Integer status,Integer id);
+    @Update("update second_hand.order set status=#{status} where book_id=#{bookId} and id!=#{id}")
+    void cancel(Integer status,Integer bookId,Integer id);
     //修改预售书籍的purchased
-    @Update("update second_hand.book set purchased=#{purchased}" +
-            " where second_hand.book.id=(select second_hand.order.book_id from second_hand.order where second_hand.order.id=#{id})")
-    void changePurchased(Integer purchased,Integer id);
+    @Update("update second_hand.book set purchased=#{purchased} where second_hand.book.id=#{bookId}")
+    void changePurchased(Integer purchased,Integer bookId);
     @Delete("delete from second_hand.book where second_hand.book.id=(select book_id from second_hand.order where second_hand.order.id=#{id})")
     void delete(Integer id);
 

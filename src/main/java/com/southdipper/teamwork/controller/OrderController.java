@@ -1,5 +1,6 @@
 package com.southdipper.teamwork.controller;
 
+import com.southdipper.teamwork.pojo.Book;
 import com.southdipper.teamwork.pojo.BookSell;
 import com.southdipper.teamwork.pojo.Order;
 import com.southdipper.teamwork.pojo.Result;
@@ -35,7 +36,7 @@ public class OrderController {
 
     @GetMapping("/sellList")
     public Result sellList(){
-        List<Order> orderList=orderService.getBySeller();
+        List<Book> orderList=orderService.getBySeller();
         return Result.success(orderList);
     }
 

@@ -1,5 +1,6 @@
 package com.southdipper.teamwork.service;
 
+import com.southdipper.teamwork.pojo.Book;
 import com.southdipper.teamwork.pojo.BookSell;
 import com.southdipper.teamwork.pojo.Order;
 
@@ -13,7 +14,7 @@ public interface OrderService {
     List<BookSell> getByBookId(Integer bookId);
 
     //通过书籍id查找卖家的出售列表
-    List<Order> getBySeller();
+    List<Book> getBySeller();
 
     //预定书籍
     void generate(Integer bookId);
