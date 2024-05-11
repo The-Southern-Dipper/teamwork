@@ -4,6 +4,7 @@ import com.southdipper.teamwork.mapper.BookMapper;
 import com.southdipper.teamwork.pojo.Book;
 import com.southdipper.teamwork.pojo.SelectRequest;
 import com.southdipper.teamwork.service.BookService;
+import com.southdipper.teamwork.util.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class BookServiceImpl implements BookService {
     //添加待售书籍
     @Override
     public void add(Book book) {
+        book.setSellerId(ThreadLocalUtil.getId());
         bookMapper.add(book);
     }
 
