@@ -28,7 +28,13 @@ public class LoginInterceptor implements HandlerInterceptor {
         if(upgrade != null && upgrade.equals("websocket")) {
             return true;
         }
-        jwtVerifyService.verify(token);
+        try {
+            jwtVerifyService.verify(token);
+        }
+        catch (Exception e) {
+            response.setStatus(401);
+            throw e;
+        }
         return true;
     }
     @Override
