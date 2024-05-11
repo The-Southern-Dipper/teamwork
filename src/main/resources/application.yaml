@@ -19,6 +19,7 @@ file:
     path: /web-app/images/
   coming:
     path: http://127.0.0.1:8080/images/
+  default-image: http://127.0.0.1:8080/images/default.jpg
 
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
