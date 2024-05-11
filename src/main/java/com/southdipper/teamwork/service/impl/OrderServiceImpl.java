@@ -47,6 +47,7 @@ public class OrderServiceImpl implements OrderService {
         order.setPayTime(LocalDateTime.now());
     }
 
+    //确认订单
     @Override
     public void confirm(Integer id) {
         orderMapper.cancel(3,id);

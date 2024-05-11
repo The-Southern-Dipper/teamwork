@@ -5,6 +5,7 @@ import com.southdipper.teamwork.pojo.Order;
 import com.southdipper.teamwork.pojo.Result;
 import com.southdipper.teamwork.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/order")
+@CrossOrigin(origins = "*")
 public class OrderController {
     @Autowired
     OrderService orderService;
