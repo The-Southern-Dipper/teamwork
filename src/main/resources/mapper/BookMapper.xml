@@ -71,6 +71,6 @@
     </select>
     <select id="getBook" resultType="book">
         <include refid="commonSelect"/>
-        where second_hand.book.id = #{bookId}
+        where seller_id = second_hand.user.id and second_hand.book.id = #{book_id}
     </select>
 </mapper>
