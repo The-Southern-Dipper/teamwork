@@ -5,10 +5,8 @@ import com.southdipper.teamwork.pojo.Order;
 import com.southdipper.teamwork.pojo.Result;
 import com.southdipper.teamwork.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,32 +15,33 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/order")
+@Validated
 @CrossOrigin(origins = "*")
 public class OrderController {
     @Autowired
     OrderService orderService;
 
-    @PostMapping("/userReverse")
+    @GetMapping("/userReverse")
     public Result userReverse(){
         List<Order> orderList=orderService.getByUserId();
         return Result.success(orderList);
     }
 
-    @PostMapping("/bookBuyer")
-    public Result bookBuyer(Integer bookId){
-        List<BookSell> bookSellList=orderService.getByBookId(bookId);
+    @GetMapping("/bookBuyer")
+    public Result bookBuyer(Integer id){
+        List<BookSell> bookSellList=orderService.getByBookId(id);
         return Result.success(bookSellList);
     }
 
-    @PostMapping("/sellList")
+    @GetMapping("/sellList")
     public Result sellList(){
         List<Order> orderList=orderService.getBySeller();
         return Result.success(orderList);
     }
 
     @PostMapping("/reserve")
-    public Result reserve(Integer bookId){
-        orderService.generate(bookId);
+    public Result reserve(Integer id){
+        orderService.generate(id);
         return Result.success();
     }
 
