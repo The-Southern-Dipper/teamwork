@@ -23,23 +23,6 @@ public class ChatController {
     ConnectionService connectionService;
     @Autowired
     ChatRecordService chatRecordService;
-    @GetMapping("/getRecord")
-    public Result getRecord(Integer id) {
-        Integer userId = ThreadLocalUtil.getId();
-        // 获取连接
-        Connection connection = connectionService.getConnection(userId, id);
-        // 先获取出来记录
-        List<ChatRecord> records = chatRecordService.getRecord(connection.getId());
-        // 上线了
-        if(userId.equals(connection.getUser1Id())) {
-            connection.setUser1Online(true);
-        }
-        else {
-            connection.setUser2Online(true);
-        }
-        connectionService.setUserOnline(connection);
-        return Result.success(records);
-    }
     @GetMapping("/getConnectionInfo")
     public Result getConnectionInfo() {
         Integer userId = ThreadLocalUtil.getId();

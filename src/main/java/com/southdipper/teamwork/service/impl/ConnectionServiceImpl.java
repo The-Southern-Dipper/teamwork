@@ -5,9 +5,11 @@ import com.southdipper.teamwork.pojo.Connection;
 import com.southdipper.teamwork.pojo.ConnectionResponse;
 import com.southdipper.teamwork.service.ConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class ConnectionServiceImpl implements ConnectionService {

@@ -24,7 +24,7 @@ public class ImageController {
     @Value("${file.coming.path}")
     private String fileComingPath;
     @PostMapping("/upload")
-    public Result upload(@RequestParam("file") MultipartFile images, HttpServletRequest request) {
+    public Result upload(@RequestParam("image") MultipartFile images, HttpServletRequest request) {
         try {
             String root = System.getProperty("user.dir");
             File dest = new File(root + fileSavePath);

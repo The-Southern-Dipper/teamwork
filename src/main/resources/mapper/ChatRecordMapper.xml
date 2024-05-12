@@ -12,6 +12,13 @@
         VALUES
             (#{connectionId}, #{senderId}, #{recieverId}, NOW(), #{contentType}, #{content})
     </insert>
+    <resultMap id="chatRecordMap" type="ChatRecord">
+        <result column="sender_id" property="senderId"/>
+        <result column="reciever_id" property="recieverId"/>
+        <result column="send_time" property="sendTime"/>
+        <result column="content_type" property="contentType"/>
+        <result column="content" property="content"/>
+    </resultMap>
     <select id="getRecord" resultType="ChatRecord">
         SELECT sender_id, reciever_id, send_time, content_type, content
         FROM second_hand.chat_record
