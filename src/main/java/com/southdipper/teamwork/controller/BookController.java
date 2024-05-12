@@ -43,7 +43,7 @@ public class BookController {
     }
 
     //删除待售书籍(按书籍ID进行删除)
-    @PutMapping("/delete")
+    @PostMapping ("/delete")
     public Result delete(Integer id) {
         bookService.delete(id);
         return Result.success();
