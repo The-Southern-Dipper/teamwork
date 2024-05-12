@@ -17,7 +17,7 @@
     </sql>
     <sql id="requestSelect">
         <where>
-            seller_id = second_hand.user.id
+            seller_id = second_hand.user.id and purchased = 0
             <if test="content != null">
                 and name like concat('%',#{content},'%')
             </if>
