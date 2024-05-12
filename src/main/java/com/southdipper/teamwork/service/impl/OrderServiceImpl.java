@@ -2,6 +2,7 @@ package com.southdipper.teamwork.service.impl;
 
 import com.southdipper.teamwork.mapper.BookMapper;
 import com.southdipper.teamwork.mapper.OrderMapper;
+import com.southdipper.teamwork.pojo.Book;
 import com.southdipper.teamwork.pojo.BookSell;
 import com.southdipper.teamwork.pojo.Order;
 import com.southdipper.teamwork.service.OrderService;
@@ -32,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
 
     //通过书籍id查找卖家的出售列表
     @Override
-    public List<Order> getBySeller() {
+    public List<Book> getBySeller() {
         Integer sellerId=ThreadLocalUtil.getId();
         return orderMapper.getBySeller(sellerId);
     }
@@ -50,9 +51,10 @@ public class OrderServiceImpl implements OrderService {
     //确认订单
     @Override
     public void confirm(Integer id) {
-        orderMapper.cancel(3,id);
+        Integer bookId=orderMapper.findBookId(id);
+        orderMapper.cancel(3,bookId,id);
         orderMapper.confirm(2,id);
-        orderMapper.changePurchased(1,id);
+        orderMapper.changePurchased(1,bookId);
         orderMapper.delete(id);
     }
 }
