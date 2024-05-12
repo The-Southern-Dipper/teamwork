@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 @ServerEndpoint("/chat/send/{senderId}")
@@ -54,7 +55,9 @@ public class SendEndpoint {
         // 先拿到发送方ID和接受方ID, 看看有无连接存在
         Integer sender = JwtUtil.getIdFromToken(token);
         reciever = message.getRecieverId();
-        Connection connection = connectionService.getConnection(sender, message.getRecieverId());
+        long threadId = Thread.currentThread().getId();
+        CompletableFuture<Connection> connectionFutrue=  connectionService.getConnection(sender, message.getRecieverId());
+        Connection connection = connectionFutrue.join();
         ChatRecord chatRecord = new ChatRecord();
         if(connection == null) { // 没有连接就需要创建连接
              // 在线的定义：用户建立WebSocket连接进行聊天
@@ -71,7 +74,8 @@ public class SendEndpoint {
              newConnection.setLatestContent(message.getContent());
              connectionService.createConnection(newConnection);
         }
-        connection = connectionService.getConnection(sender, message.getRecieverId());
+        connectionFutrue = connectionService.getConnection(sender, message.getRecieverId());
+        connection = connectionFutrue.join();
         boolean isOne = sender.equals(connection.getUser1Id());
         boolean recieverOnline = isOne? connection.isUser2Online() : connection.isUser1Online();
         if(!recieverOnline) {
@@ -117,7 +121,8 @@ public class SendEndpoint {
             return;
         }
         // 用户关闭连接，下线
-        Connection connection = connectionService.getConnection(senderId, reciever);
+        CompletableFuture<Connection> connectionFuture= connectionService.getConnection(senderId, reciever);
+        Connection connection = connectionFuture.join();
         if(connection== null) {
             return;
         }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.southdipper.teamwork.mapper.ConnectionMapper">
     <select id="getConnection" resultType="Connection">
-        SELECT id, user1_id, user2_id, user1_online, user2_online, user1_unread, user2_unread, create_time
+        SELECT id, user1_id, user2_id, user1_online, user2_online, user1_unread, user2_unread, latest_content_type, latest_content, create_time
         FROM second_hand.connection
         WHERE (user1_id = #{user1Id} AND user2_id = #{user2Id})
            OR (user1_id = #{user2Id} AND user2_id = #{user1Id})
