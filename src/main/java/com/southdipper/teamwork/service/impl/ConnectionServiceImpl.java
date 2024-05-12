@@ -15,10 +15,9 @@ import java.util.concurrent.CompletableFuture;
 public class ConnectionServiceImpl implements ConnectionService {
     @Autowired
     ConnectionMapper connectionMapper;
-    @Async
     @Override
-    public CompletableFuture<Connection> getConnection(Integer user1Id, Integer user2Id) {
-        return CompletableFuture.completedFuture(connectionMapper.getConnection(user1Id, user2Id));
+    public Connection getConnection(Integer user1Id, Integer user2Id) {
+        return connectionMapper.getConnection(user1Id, user2Id);
     }
     @Override
     public void createConnection(Connection connection) {

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/chat")
@@ -24,25 +23,6 @@ public class ChatController {
     ConnectionService connectionService;
     @Autowired
     ChatRecordService chatRecordService;
-    @GetMapping("/getRecord")
-    public Result getRecord(Integer id) {
-        long threadId = Thread.currentThread().getId();
-        Integer userId = ThreadLocalUtil.getId();
-        // 获取连接
-        CompletableFuture<Connection> connectionFuture = connectionService.getConnection(userId, id);
-        Connection connection = connectionFuture.join();
-        // 先获取出来记录
-        List<ChatRecord> records = chatRecordService.getRecord(connection.getId());
-        // 上线了
-        if(userId.equals(connection.getUser1Id())) {
-            connection.setUser1Online(true);
-        }
-        else {
-            connection.setUser2Online(true);
-        }
-        connectionService.setUserOnline(connection);
-        return Result.success(records);
-    }
     @GetMapping("/getConnectionInfo")
     public Result getConnectionInfo() {
         Integer userId = ThreadLocalUtil.getId();

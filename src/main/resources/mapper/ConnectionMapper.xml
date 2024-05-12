@@ -44,7 +44,8 @@
     </update>
     <resultMap id="connectionInfoMap1" type="ConnectionResponse">
         <id column="id" property="connectionId"/>
-        <result column="user2_id" property="chatTargetId"/>
+        <result column="targetname" property="targetName"/>
+        <result column="targetimg" property="targetImg"/>
         <result column="user2_online" property="isChatTargetOnline"/>
         <result column="user1_unread" property="unreadMessageCount"/>
         <result column="latest_content_type" property="latestUnreadMessageType"/>
@@ -52,7 +53,8 @@
     </resultMap>
     <select id="getConnectionInfo1" resultMap="connectionInfoMap1">
         SELECT  id,
-                user2_id,
+                (SELECT username FROM second_hand.user WHERE id = (SELECT user2_id FROM connection WHERE user1_id = #{userId})) as targetname,
+                (SELECT user_img FROM second_hand.user WHERE id = (SELECT user2_id FROM connection WHERE user1_id = #{userId})) as targetimg,
                 user2_online,
                 user1_unread,
                 latest_content_type,
@@ -62,7 +64,8 @@
     </select>
     <resultMap id="connectionInfoMap2" type="ConnectionResponse">
         <id column="id" property="connectionId"/>
-        <result column="user1_id" property="chatTargetId"/>
+        <result column="targetname" property="targetName"/>
+        <result column="targetimg" property="targetImg"/>
         <result column="user1_online" property="isChatTargetOnline"/>
         <result column="user2_unread" property="unreadMessageCount"/>
         <result column="latest_content_type" property="latestUnreadMessageType"/>
@@ -70,7 +73,8 @@
     </resultMap>
     <select id="getConnectionInfo2" resultMap="connectionInfoMap2">
         SELECT  id,
-                user1_id,
+                (SELECT username FROM second_hand.user WHERE id = (SELECT user1_id FROM connection WHERE user2_id = #{userId})) as targetname,
+                (SELECT user_img FROM second_hand.user WHERE id = (SELECT user1_id FROM connection WHERE user2_id = #{userId})) as targetimg,
                 user1_online,
                 user2_unread,
                 latest_content_type,

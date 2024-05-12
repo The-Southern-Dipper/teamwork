@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ConnectionResponse {
     private Integer connectionId;
-    private Integer chatTargetId;
+    private String  targetName;
+    private String  targetImg;
     private boolean isChatTargetOnline;
     private Integer unreadMessageCount;
     private Integer latestUnreadMessageType;

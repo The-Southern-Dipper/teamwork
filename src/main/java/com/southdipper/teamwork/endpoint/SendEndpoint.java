@@ -20,11 +20,11 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 @Component
-@ServerEndpoint("/chat/send/{senderId}")
+@ServerEndpoint("/chat/{senderId}")
 public class SendEndpoint {
     private static JwtVerifyService jwtVerifyService;
     private static ConnectionService connectionService;
@@ -46,19 +46,13 @@ public class SendEndpoint {
             session.getAsyncRemote().sendText(JSON.toJSONString(ret, SerializerFeature.WriteMapNullValue));
             this.session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, "登录凭证过期或错误"));
         }
-        // 如果是单纯的验证请求，那直接不用运行后续了
-        if(message.getMessageType() == 0) {
-            Result ret = Result.success("验证成功");
-            session.getAsyncRemote().sendText(JSON.toJSONString(ret, SerializerFeature.WriteMapNullValue));
-            return;
-        }
+        // 上述代码已经对消息进行了验证
         // 先拿到发送方ID和接受方ID, 看看有无连接存在
         Integer sender = JwtUtil.getIdFromToken(token);
         reciever = message.getRecieverId();
-        long threadId = Thread.currentThread().getId();
-        CompletableFuture<Connection> connectionFutrue=  connectionService.getConnection(sender, message.getRecieverId());
-        Connection connection = connectionFutrue.join();
+        Connection connection = connectionService.getConnection(sender, reciever);
         ChatRecord chatRecord = new ChatRecord();
+        // 不管是获取聊天记录还是发送消息，前提都是需要有一个连接
         if(connection == null) { // 没有连接就需要创建连接
              // 在线的定义：用户建立WebSocket连接进行聊天
              Connection newConnection = new Connection();
@@ -74,38 +68,46 @@ public class SendEndpoint {
              newConnection.setLatestContent(message.getContent());
              connectionService.createConnection(newConnection);
         }
-        connectionFutrue = connectionService.getConnection(sender, message.getRecieverId());
-        connection = connectionFutrue.join();
-        boolean isOne = sender.equals(connection.getUser1Id());
-        boolean recieverOnline = isOne? connection.isUser2Online() : connection.isUser1Online();
-        if(!recieverOnline) {
-            if(isOne) {
-                connection.setUser2Unread(connection.getUser2Unread() + 1);
+        connection = connectionService.getConnection(sender, reciever);
+        if(message.getMessageType() == 1){
+            // messageType为1，发送消息
+            boolean isOne = sender.equals(connection.getUser1Id());
+            boolean recieverOnline = isOne? connection.isUser2Online() : connection.isUser1Online();
+            if(!recieverOnline) { // 接收方不在线
+                if(isOne) {
+                    connection.setUser2Unread(connection.getUser2Unread() + 1);
+                }
+                else {
+                    connection.setUser1Unread(connection.getUser1Unread() + 1);
+                }
+                connection.setLatestContentType(message.getMessageType());
+                connection.setLatestContent(message.getContent());
+                connectionService.updateConnection(connection);
             }
-            else {
-                connection.setUser1Unread(connection.getUser1Unread() + 1);
+            else { // 接收方在线
+                // 推送消息给接收方
+                Session recieverSession = map.get(message.getRecieverId());
+                PutMessage putMessage =
+                        new PutMessage(
+                                1,
+                                sender,
+                                LocalDateTime.now(),
+                                message.getContentType(),
+                                message.getContent());
+                recieverSession.getAsyncRemote().sendText(JSON.toJSONString(putMessage, SerializerFeature.WriteMapNullValue));
             }
-            connection.setLatestContentType(message.getMessageType());
-            connection.setLatestContent(message.getContent());
-            connectionService.updateConnection(connection);
+            // 存储聊天记录到数据库
+            chatRecord.setConnectionId(connection.getId());
+            chatRecord.setSenderId(sender);
+            chatRecord.setRecieverId(message.getRecieverId());
+            chatRecord.setContentType(message.getContentType());
+            chatRecord.setContent(message.getContent());
+            chatRecordService.insertChatRecord(chatRecord);
         }
-        else {
-            Session recieverSession = map.get(message.getRecieverId());
-            PutMessage putMessage =
-                    new PutMessage(
-                            1,
-                            sender,
-                            LocalDateTime.now(),
-                            message.getContentType(),
-                            message.getContent());
-            recieverSession.getAsyncRemote().sendText(JSON.toJSONString(putMessage, SerializerFeature.WriteMapNullValue));
-        }
-        chatRecord.setConnectionId(connection.getId());
-        chatRecord.setSenderId(sender);
-        chatRecord.setRecieverId(message.getRecieverId());
-        chatRecord.setContentType(message.getContentType());
-        chatRecord.setContent(message.getContent());
-        chatRecordService.insertChatRecord(chatRecord);
+        // 不管是发送消息还是接收聊天记录，都会收到最新的聊天记录列表
+        List<ChatRecord> records = chatRecordService.getRecord(connection.getId());
+        Result ret = Result.success(records);
+        this.session.getAsyncRemote().sendText(JSON.toJSONString(ret, SerializerFeature.WriteMapNullValue));
     }
 
     @OnOpen
@@ -121,8 +123,7 @@ public class SendEndpoint {
             return;
         }
         // 用户关闭连接，下线
-        CompletableFuture<Connection> connectionFuture= connectionService.getConnection(senderId, reciever);
-        Connection connection = connectionFuture.join();
+        Connection connection =  connectionService.getConnection(senderId, reciever);
         if(connection== null) {
             return;
         }
@@ -133,6 +134,10 @@ public class SendEndpoint {
             connection.setUser2Online(false);
         }
         connectionService.setUserOnline(connection);
+    }
+    @OnError
+    public void OnError(Session session, Throwable throwable) {
+        throwable.printStackTrace();
     }
 
     @Autowired
