@@ -44,6 +44,7 @@ create table `order`
     id int unsigned primary key auto_increment comment '订单ID',
     user_id int unsigned not null comment '用户ID',
     book_id int unsigned not null comment '书籍ID',
+    book_name varchar(50) not null comment '书籍名称',
     pay_time datetime not null comment '下单时间',
     address varchar(100) not null comment '收货地址',
     status tinyint not null comment '订单状态'
