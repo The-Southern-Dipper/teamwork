@@ -69,9 +69,9 @@ public class SendEndpoint {
              connectionService.createConnection(newConnection);
         }
         connection = connectionService.getConnection(sender, reciever);
+        boolean isOne = sender.equals(connection.getUser1Id());
         if(message.getMessageType() == 1){
             // messageType为1，发送消息
-            boolean isOne = sender.equals(connection.getUser1Id());
             boolean recieverOnline = isOne? connection.isUser2Online() : connection.isUser1Online();
             if(!recieverOnline) { // 接收方不在线
                 if(isOne) {
@@ -103,6 +103,15 @@ public class SendEndpoint {
             chatRecord.setContentType(message.getContentType());
             chatRecord.setContent(message.getContent());
             chatRecordService.insertChatRecord(chatRecord);
+        }
+        else {
+            if(isOne) {
+                connection.setUser1Online(true);
+            }
+            else {
+                connection.setUser2Online(true);
+            }
+            connectionService.setUserOnline(connection);
         }
         // 不管是发送消息还是接收聊天记录，都会收到最新的聊天记录列表
         List<ChatRecord> records = chatRecordService.getRecord(connection.getId());
