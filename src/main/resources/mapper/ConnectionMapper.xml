@@ -61,7 +61,7 @@
                 connect.latest_content_type as latest_content_type,
                 connect.latest_content as latest_content
         FROM second_hand.connection as connect, second_hand.user as u
-        WHERE (connect.user1_id = u.id  AND u.id = #{userId})
+        WHERE (connect.user2_id = u.id AND connect.user1_id = #{userId} AND connect.user1_id != connect.user2_id)
     </select>
     <resultMap id="connectionInfoMap2" type="ConnectionResponse">
         <id column="id" property="connectionId"/>
@@ -82,6 +82,6 @@
             connect.latest_content_type as latest_content_type,
             connect.latest_content as latest_content
         FROM second_hand.connection as connect, second_hand.user as u
-        WHERE (connect.user2_id = u.id  AND u.id = #{userId})
+        WHERE (connect.user1_id = u.id AND connect.user2_id = #{userId} AND connect.user2_id != connect.user1_id)
     </select>
 </mapper>
