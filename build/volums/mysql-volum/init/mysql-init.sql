@@ -118,8 +118,8 @@ VALUES
     (5,'计算机类'),
     (6,'物理类');
 
-insert into `order`(id, user_id, book_id, pay_time, address, status)
-values (1, 2, 1, now(), '广东工业大学教5-525', 1),
-       (2, 2, 2, now(), '广东工业大学教5-525', 1),
-       (3, 2, 3, now(), '广东工业大学教5-525', 1),
-       (4, 2, 4, now(), '广东工业大学教5-525', 1);
+insert into `order`(id, user_id, book_id, book_name, pay_time, address, status)
+values (1, 2, 1,  '高等数学（上）' , now(), '广东工业大学教5-525', 1),
+       (2, 2, 2,  '高等数学（上）', now(),'广东工业大学教5-525', 1),
+       (3, 2, 3,  '高等数学（上）', now(), '广东工业大学教5-525', 1),
+       (4, 2, 4,  '高等数学（上）', now(), '广东工业大学教5-525', 1);
