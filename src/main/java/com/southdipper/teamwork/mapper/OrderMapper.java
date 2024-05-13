@@ -24,9 +24,12 @@ public interface OrderMapper {
     List<Book> getBySeller(Integer sellerId);
 
     //预定书籍
-    @Insert("insert into second_hand.order(user_id,book_id,pay_time,address,status)"+
-            " values (#{userId},#{bookId},#{payTime},#{address},#{status})")
+    @Insert("insert into second_hand.order(user_id,book_id,book_name,pay_time,address,status)"+
+            " values (#{userId},#{bookId},#{bookName},#{payTime},#{address},#{status})")
     void generate(Order order);
+    //根据bookId找到对应书名
+    @Select("select second_hand.book.name from second_hand.book where id=#{id}")
+    String findBookName(Integer id);
 
     //确认订单
     //确认的订单
