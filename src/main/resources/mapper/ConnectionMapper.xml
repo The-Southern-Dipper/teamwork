@@ -52,15 +52,16 @@
         <result column="latest_content" property="latestUnreadMessage"/>
     </resultMap>
     <select id="getConnectionInfo1" resultMap="connectionInfoMap1">
-        SELECT  id,
-                (SELECT username FROM second_hand.user WHERE id = (SELECT user2_id FROM connection WHERE user1_id = #{userId})) as targetname,
-                (SELECT user_img FROM second_hand.user WHERE id = (SELECT user2_id FROM connection WHERE user1_id = #{userId})) as targetimg,
-                user2_online,
-                user1_unread,
-                latest_content_type,
-                latest_content
-        FROM second_hand.connection
-        WHERE user1_id = #{userId}
+        SELECT
+                u.id as id,
+                u.username as targetname,
+                u.user_img as targetimg,
+                connect.user2_online as user2_online,
+                connect.user1_unread as user1_unread,
+                connect.latest_content_type as latest_content_type,
+                connect.latest_content as latest_content
+        FROM second_hand.connection as connect, second_hand.user as u
+        WHERE (connect.user1_id = u.id  AND u.id = #{userId})
     </select>
     <resultMap id="connectionInfoMap2" type="ConnectionResponse">
         <id column="id" property="connectionId"/>
@@ -72,14 +73,15 @@
         <result column="latest_content" property="latestUnreadMessage"/>
     </resultMap>
     <select id="getConnectionInfo2" resultMap="connectionInfoMap2">
-        SELECT  id,
-                (SELECT username FROM second_hand.user WHERE id = (SELECT user1_id FROM connection WHERE user2_id = #{userId})) as targetname,
-                (SELECT user_img FROM second_hand.user WHERE id = (SELECT user1_id FROM connection WHERE user2_id = #{userId})) as targetimg,
-                user1_online,
-                user2_unread,
-                latest_content_type,
-                latest_content
-        FROM second_hand.connection
-        WHERE user2_id = #{userId}
+        SELECT
+            u.id as id,
+            u.username as targetname,
+            u.user_img as targetimg,
+            connect.user1_online as user1_online,
+            connect.user2_unread as user2_unread,
+            connect.latest_content_type as latest_content_type,
+            connect.latest_content as latest_content
+        FROM second_hand.connection as connect, second_hand.user as u
+        WHERE (connect.user2_id = u.id  AND u.id = #{userId})
     </select>
 </mapper>
