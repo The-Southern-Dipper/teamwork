@@ -83,21 +83,28 @@ public class SendEndpoint {
                 connection.setLatestContentType(message.getMessageType());
                 connection.setLatestContent(message.getContent());
                 connectionService.updateConnection(connection);
+                // 存储聊天记录到数据库
+                chatRecord.setConnectionId(connection.getId());
+                chatRecord.setSenderId(sender);
+                chatRecord.setRecieverId(message.getRecieverId());
+                chatRecord.setContentType(message.getContentType());
+                chatRecord.setContent(message.getContent());
+                chatRecordService.insertChatRecord(chatRecord);
             }
             else { // 接收方在线
                 // 推送消息给接收方
+                // 存储聊天记录到数据库
+                chatRecord.setConnectionId(connection.getId());
+                chatRecord.setSenderId(sender);
+                chatRecord.setRecieverId(message.getRecieverId());
+                chatRecord.setContentType(message.getContentType());
+                chatRecord.setContent(message.getContent());
+                chatRecordService.insertChatRecord(chatRecord);
                 Session recieverSession = map.get(message.getRecieverId());
                 List<ChatRecord> records = chatRecordService.getRecord(connection.getId());
                 Result ret = Result.success(records);
                 recieverSession.getBasicRemote().sendText(JSON.toJSONString(ret, SerializerFeature.WriteMapNullValue));
             }
-            // 存储聊天记录到数据库
-            chatRecord.setConnectionId(connection.getId());
-            chatRecord.setSenderId(sender);
-            chatRecord.setRecieverId(message.getRecieverId());
-            chatRecord.setContentType(message.getContentType());
-            chatRecord.setContent(message.getContent());
-            chatRecordService.insertChatRecord(chatRecord);
         }
         else {
             if(isOne) {
