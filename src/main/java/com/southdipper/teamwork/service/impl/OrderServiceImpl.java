@@ -42,10 +42,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void generate(Integer bookId) {
         Order order = new Order();
+        String bookName= orderMapper.findBookName(bookId);
         order.setBookId(bookId);
+        order.setBookName(bookName);
         order.setUserId(ThreadLocalUtil.getId());
+        order.setAddress("由买卖双方聊天交流决定");
         order.setStatus(1);
         order.setPayTime(LocalDateTime.now());
+        orderMapper.generate(order);
     }
 
     //确认订单
