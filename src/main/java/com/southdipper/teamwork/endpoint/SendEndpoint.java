@@ -29,7 +29,7 @@ public class SendEndpoint {
     private static JwtVerifyService jwtVerifyService;
     private static ConnectionService connectionService;
     private static ChatRecordService chatRecordService;
-    private static Map<Integer, Session> map = new HashMap<>();
+    private static final Map<Integer, Session> map = new HashMap<>();
     Session session;
     Integer reciever = null;
 
@@ -89,7 +89,7 @@ public class SendEndpoint {
                 Session recieverSession = map.get(message.getRecieverId());
                 List<ChatRecord> records = chatRecordService.getRecord(connection.getId());
                 Result ret = Result.success(records);
-                recieverSession.getAsyncRemote().sendText(JSON.toJSONString(ret, SerializerFeature.WriteMapNullValue));
+                recieverSession.getBasicRemote().sendText(JSON.toJSONString(ret, SerializerFeature.WriteMapNullValue));
             }
             // 存储聊天记录到数据库
             chatRecord.setConnectionId(connection.getId());
