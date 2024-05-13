@@ -59,8 +59,8 @@ create table `connection`
     user2_online tinyint(1) not null default 0 comment '用户2是否在线',
     user1_unread int not null default 0 comment '用户1未读数',
     user2_unread int not null default 0 comment '用户2未读数',
-    latest_content_type int not null comment '最后一条聊天记录类型',
-    latest_content varchar(500) not null comment '最后一条聊天记录',
+    latest_content_type int comment '最后一条聊天记录类型',
+    latest_content varchar(500) comment '最后一条聊天记录',
     create_time datetime not null comment '创建时间'
 )character set utf8mb4 comment '聊天连接表';
 
