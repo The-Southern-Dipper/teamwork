@@ -87,14 +87,9 @@ public class SendEndpoint {
             else { // 接收方在线
                 // 推送消息给接收方
                 Session recieverSession = map.get(message.getRecieverId());
-                PutMessage putMessage =
-                        new PutMessage(
-                                1,
-                                sender,
-                                LocalDateTime.now(),
-                                message.getContentType(),
-                                message.getContent());
-                recieverSession.getAsyncRemote().sendText(JSON.toJSONString(putMessage, SerializerFeature.WriteMapNullValue));
+                List<ChatRecord> records = chatRecordService.getRecord(connection.getId());
+                Result ret = Result.success(records);
+                recieverSession.getAsyncRemote().sendText(JSON.toJSONString(ret, SerializerFeature.WriteMapNullValue));
             }
             // 存储聊天记录到数据库
             chatRecord.setConnectionId(connection.getId());
