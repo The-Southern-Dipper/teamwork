@@ -16,7 +16,7 @@ public interface OrderMapper {
 
     //通过书籍id查找该书的预订者和对应订单id
     @Select("select second_hand.order.id,second_hand.user.nickname,second_hand.user.email from second_hand.order join second_hand.user" +
-            " where second_hand.order.book_id=#{bookId} and second_hand.user.id=(select second_hand.order.user_id from second_hand.order where second_hand.order.book_id=#{bookId})")
+            " where second_hand.order.book_id=#{bookId} and second_hand.user.id = second_hand.order.user_id")
     List<BookSell> getByBookId(Integer bookId);
 
     //通过书籍id查找卖家的出售列表
