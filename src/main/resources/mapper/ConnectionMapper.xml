@@ -54,7 +54,7 @@
     <select id="getConnectionInfo1" resultMap="connectionInfoMap1">
         SELECT
                 u.id as id,
-                u.username as targetname,
+                u.nickname as targetname,
                 u.user_img as targetimg,
                 connect.user2_online as user2_online,
                 connect.user1_unread as user1_unread,
@@ -75,7 +75,7 @@
     <select id="getConnectionInfo2" resultMap="connectionInfoMap2">
         SELECT
             u.id as id,
-            u.username as targetname,
+            u.nickname as targetname,
             u.user_img as targetimg,
             connect.user1_online as user1_online,
             connect.user2_unread as user2_unread,

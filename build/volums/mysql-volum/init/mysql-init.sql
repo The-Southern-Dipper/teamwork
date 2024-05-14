@@ -78,7 +78,7 @@ create table `chat_record`
 # 初始化一些数据用于测试
 insert into user(id, username, password, nickname, email, user_img, update_time, create_time, power)
 values (1, 'Aderversa', 'e10adc3949ba59abbe56e057f20f883e', '不想早自习', '2457699535@qq.com','http://127.0.0.1:8080/images/default.jpg', now(), now(), 0),
-       (2, 'miaomiao',  'e10adc3949ba59abbe56e057f20f883e', 'miaomiao',  '1992201300@qq.com','http://127.0.0,1:8080/images/default.jpg', now(), now(), 0);
+       (2, 'miaomiao',  'e10adc3949ba59abbe56e057f20f883e', 'miaomiao',  '1992201300@qq.com','http://127.0.0.1:8080/images/default.jpg', now(), now(), 0);
 
 insert into book(id, name, type_id, price, isbn, img, detail, release_time, seller_id, purchased)
 VALUES (1, '高等数学（上）', 4, 49.50, '123456', '1.jpg', '', now(), 1, 0),
