@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div>发送消息：</div>
+    <input type="text" id="msgContent"/>
+    <input type="button" id="1" value="点我发送" onclick="CHAT.chat()"/>
+
+    <div>接收消息：</div>
+    <div id="recieveMsg" style="background-color: gainsboro;"></div>
+
+    <script type="application/javascript">
+        document.getElementById("1").onclick = function () {
+            let ws = new WebSocket("ws://localhost:8080/chat/1");
+            ws.onopen = function () {
+                console.log("connecting...");
+                let obj = {
+                    "messageType": 1,
+                    "Authorization": "eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MTU1ODU0NzgsImV4cCI6MTcxNTU4OTA3OCwiaWQiOjEsInVzZXJuYW1lIjoiQWRlcnZlcnNhIn0.SOFVFPEx2ymnyhd9BNtUF_5V3beBVF6UcBEMx_CSMq4",
+                    "recieverId": 3,
+                    "contentType": 1,
+                    "content": "你好"
+                };
+                ws.send(JSON.stringify(obj));
+            }
+            ws.onmessage = function (msg) {
+                console.log(JSON.parse(msg.data))
+            }
+        }
+    </script>
+</body>
+</html>

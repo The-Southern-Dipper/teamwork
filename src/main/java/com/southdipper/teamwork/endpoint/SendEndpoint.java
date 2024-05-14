@@ -29,7 +29,7 @@ public class SendEndpoint {
     private static JwtVerifyService jwtVerifyService;
     private static ConnectionService connectionService;
     private static ChatRecordService chatRecordService;
-    private static Map<Integer, Session> map = new HashMap<>();
+    private static final Map<Integer, Session> map = new HashMap<>();
     Session session;
     Integer reciever = null;
 
@@ -69,9 +69,9 @@ public class SendEndpoint {
              connectionService.createConnection(newConnection);
         }
         connection = connectionService.getConnection(sender, reciever);
+        boolean isOne = sender.equals(connection.getUser1Id());
         if(message.getMessageType() == 1){
             // messageType为1，发送消息
-            boolean isOne = sender.equals(connection.getUser1Id());
             boolean recieverOnline = isOne? connection.isUser2Online() : connection.isUser1Online();
             if(!recieverOnline) { // 接收方不在线
                 if(isOne) {
@@ -83,26 +83,37 @@ public class SendEndpoint {
                 connection.setLatestContentType(message.getMessageType());
                 connection.setLatestContent(message.getContent());
                 connectionService.updateConnection(connection);
+                // 存储聊天记录到数据库
+                chatRecord.setConnectionId(connection.getId());
+                chatRecord.setSenderId(sender);
+                chatRecord.setRecieverId(message.getRecieverId());
+                chatRecord.setContentType(message.getContentType());
+                chatRecord.setContent(message.getContent());
+                chatRecordService.insertChatRecord(chatRecord);
             }
             else { // 接收方在线
                 // 推送消息给接收方
+                // 存储聊天记录到数据库
+                chatRecord.setConnectionId(connection.getId());
+                chatRecord.setSenderId(sender);
+                chatRecord.setRecieverId(message.getRecieverId());
+                chatRecord.setContentType(message.getContentType());
+                chatRecord.setContent(message.getContent());
+                chatRecordService.insertChatRecord(chatRecord);
                 Session recieverSession = map.get(message.getRecieverId());
-                PutMessage putMessage =
-                        new PutMessage(
-                                1,
-                                sender,
-                                LocalDateTime.now(),
-                                message.getContentType(),
-                                message.getContent());
-                recieverSession.getAsyncRemote().sendText(JSON.toJSONString(putMessage, SerializerFeature.WriteMapNullValue));
+                List<ChatRecord> records = chatRecordService.getRecord(connection.getId());
+                Result ret = Result.success(records);
+                recieverSession.getBasicRemote().sendText(JSON.toJSONString(ret, SerializerFeature.WriteMapNullValue));
             }
-            // 存储聊天记录到数据库
-            chatRecord.setConnectionId(connection.getId());
-            chatRecord.setSenderId(sender);
-            chatRecord.setRecieverId(message.getRecieverId());
-            chatRecord.setContentType(message.getContentType());
-            chatRecord.setContent(message.getContent());
-            chatRecordService.insertChatRecord(chatRecord);
+        }
+        else {
+            if(isOne) {
+                connection.setUser1Online(true);
+            }
+            else {
+                connection.setUser2Online(true);
+            }
+            connectionService.setUserOnline(connection);
         }
         // 不管是发送消息还是接收聊天记录，都会收到最新的聊天记录列表
         List<ChatRecord> records = chatRecordService.getRecord(connection.getId());

@@ -59,8 +59,8 @@ create table `connection`
     user2_online tinyint(1) not null default 0 comment '用户2是否在线',
     user1_unread int not null default 0 comment '用户1未读数',
     user2_unread int not null default 0 comment '用户2未读数',
-    latest_content_type int not null comment '最后一条聊天记录类型',
-    latest_content varchar(500) not null comment '最后一条聊天记录',
+    latest_content_type int comment '最后一条聊天记录类型',
+    latest_content varchar(500) comment '最后一条聊天记录',
     create_time datetime not null comment '创建时间'
 )character set utf8mb4 comment '聊天连接表';
 
@@ -78,7 +78,7 @@ create table `chat_record`
 # 初始化一些数据用于测试
 insert into user(id, username, password, nickname, email, user_img, update_time, create_time, power)
 values (1, 'Aderversa', 'e10adc3949ba59abbe56e057f20f883e', '不想早自习', '2457699535@qq.com','http://127.0.0.1:8080/images/default.jpg', now(), now(), 0),
-       (2, 'miaomiao',  'e10adc3949ba59abbe56e057f20f883e', 'miaomiao',  '1992201300@qq.com','http://127.0.0,1:8080/images/default.jpg', now(), now(), 0);
+       (2, 'miaomiao',  'e10adc3949ba59abbe56e057f20f883e', 'miaomiao',  '1992201300@qq.com','http://127.0.0.1:8080/images/default.jpg', now(), now(), 0);
 
 insert into book(id, name, type_id, price, isbn, img, detail, release_time, seller_id, purchased)
 VALUES (1, '高等数学（上）', 4, 49.50, '123456', '1.jpg', '', now(), 1, 0),
@@ -118,8 +118,8 @@ VALUES
     (5,'计算机类'),
     (6,'物理类');
 
-insert into `order`(id, user_id, book_id, pay_time, address, status)
-values (1, 2, 1, now(), '广东工业大学教5-525', 1),
-       (2, 2, 2, now(), '广东工业大学教5-525', 1),
-       (3, 2, 3, now(), '广东工业大学教5-525', 1),
-       (4, 2, 4, now(), '广东工业大学教5-525', 1);
+insert into `order`(id, user_id, book_id, book_name, pay_time, address, status)
+values (1, 2, 1,  '高等数学（上）' , now(), '广东工业大学教5-525', 1),
+       (2, 2, 2,  '高等数学（上）', now(),'广东工业大学教5-525', 1),
+       (3, 2, 3,  '高等数学（上）', now(), '广东工业大学教5-525', 1),
+       (4, 2, 4,  '高等数学（上）', now(), '广东工业大学教5-525', 1);
